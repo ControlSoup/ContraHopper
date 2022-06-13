@@ -39,7 +39,7 @@ def state_derivative(state, inputs, g_mps2, mass_properties, resulting_state):
 
     # Resulting acceleration from the forcing acting on the body
     acceleration_mps2 = forces_n / mass_kg
-    acceleration_mps2[2] = acceleration_mps2[2]
+    acceleration_mps2[2] = acceleration_mps2[2]-g_mps2
 
     # Resulting angular acceleration due to the moments acting on the body
     wdot_radps2 = np.matmul(np.linalg.inv(i_tensor_cg),

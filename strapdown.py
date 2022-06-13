@@ -1,12 +1,13 @@
 # the result matrix is replaced with euler angle equivalent of  a dcm (resulting angles in radians)
 import numpy as np
 
-rad2deg = 180/np.pi
+rad2deg = 180 / np.pi
+
 
 def dcm2euler(dcm):
-    pitch =0
+    pitch = 0
     yaw = 0
-    roll =0
+    roll = 0
     roll = np.arctan(-dcm[2][0] / np.sqrt(1 - (dcm[2][0] * dcm[2][0])))
 
     if abs(dcm[2][0]) < 0.999:
@@ -19,7 +20,7 @@ def dcm2euler(dcm):
     if dcm[2][0] >= 0.999:
         pitch = np.pi + np.arctan((dcm[1][2] + dcm[0][1]) / (dcm[0][2] - dcm[1][1])) - yaw
 
-    result = [pitch,roll,yaw]
+    result = [pitch, yaw, roll]
     return result
 
 
@@ -43,33 +44,36 @@ def euler2dcm(euler=None, result=None):
     return np.array(result)
 
 
-def rates2dcm(rates,dcm):
+def rates2dcm(dcm, rates):
     '''
     Inputs : angular rates, and the current dcm
     Outpus : a dcm rate
     '''
-    #pg 3-52
+    # pg 3-52
     scew_sym = np.array([[0, -rates[2], rates[1]],
                          [rates[2], 0, -rates[0]],
                          [-rates[1], -rates[0], 0]])
-    dcm_dot = np.cross(dcm, scew_sym)
+    dcm_dot = np.matmul(dcm, scew_sym)
 
     return np.array(dcm_dot)
 
 
-
-time = np.arange(0,5,0.0001)
+time = np.arange(0, 5, 0.0001)
 i_prev = 0
-rate = np.array([[0,0,0],[0,0,0],[0,0,0]])
-dis =0
-dis_dot =0
-integration = np.array([[1,0,0],[0,1,0],[0,0,1]])
-for i in range(0,len(time)):
-    integration = integration + (rates2dcm(np.array([0.001,0,0]),integration) * 0.0001)
-    dis_dot = dis_dot + 0.001*0.0001
-    dis = dis + dis_dot*0.0001
+rate = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
+dis = 0
+dis_dot = 0
+integration = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+
+
+for i in range(0, len(time)):
+    temp = rates2dcm(integration, np.array([0.001, 0, 0]))
+    print(dcm2euler(temp))
+    integration = integration + (temp*0.0001)
+    dis_dot = dis_dot + 0.001 * 0.0001
+    dis = dis + dis_dot * 0.0001
+
 euler = np.array(dcm2euler(integration))
 
 print(euler)
 print(dis)
-
