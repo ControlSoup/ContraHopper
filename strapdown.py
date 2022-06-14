@@ -51,6 +51,13 @@ def rates2dcm(dcm, w):
 
     return np.array(dcm_dot)
 
+def orthonormalize(dcm):
+    row_1 = dcm[0]/np.linalg.norm(dcm[0])
+    row_2 = dcm[1]/np.linalg.norm(dcm[1])
+    row_3 = dcm[2]/np.linalg.norm(dcm[2])
 
+    row_2 = np.cross(row_1,row_3)
+    row_3 = np.cross(row_1,row_2)
+    return np.array([row_1,row_2,row_3])
 
 
