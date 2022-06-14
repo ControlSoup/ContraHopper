@@ -33,7 +33,7 @@ def state_derivative(state, inputs, g_mps2, mass_properties, resulting_state):
     w_radps = state.w_radps  # Current angular rate in radians per second
 
     forces_n = inputs.forces_n  # Forces acting about cg
-    moments_npm = inputs.moments_npm  # Moments acting about cg
+    moments_nm = inputs.moments_nm  # Moments acting about cg
 
     # Kinematics Source: https://en.m.wikipedia.org/wiki/Rigid_body_dynamics
 
@@ -43,11 +43,11 @@ def state_derivative(state, inputs, g_mps2, mass_properties, resulting_state):
 
     # Resulting angular acceleration due to the moments acting on the body
     wdot_radps2 = np.matmul(np.linalg.inv(i_tensor_cg),
-                            (moments_npm - (np.cross(w_radps,
+                            (moments_nm - (np.cross(w_radps,
                                                      (np.matmul(i_tensor_cg, w_radps))))))
 
     # Converts the current angular rates to a DCM rate
-    attitudedot_Cb2i_dcm = strapdown.rates2dcm(w_radps, attitude_Cb2i_dcm)
+    attitudedot_Cb2i_dcm = strapdown.rates2dcm(attitude_Cb2i_dcm,w_radps)
 
     resulting_state.velocity_mps = velocity_mps
     resulting_state.acceleration_mps2 = acceleration_mps2
@@ -109,5 +109,4 @@ def new_state(state, inputs, dt, g_mps2, mass_properties):
     state.velocity_mps = rk4_result.velocity_mps
     state.attitude_Cb2i_dcm = rk4_result.attitude_Cb2i_dcm
     state.w_radps = rk4_result.w_radps
-    print(k1.attitudedot_Cb2i_dcm)
     return None
