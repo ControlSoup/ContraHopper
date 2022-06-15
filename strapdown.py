@@ -60,4 +60,4 @@ def orthonormalize(dcm):
     row_3 = np.cross(row_1,row_2)
     return np.array([row_1,row_2,row_3])
 
-
+#7.1.1.3-1 and 7.1.1.3-9 (7.1.1.3 7-18)

@@ -54,9 +54,10 @@ stash_array = np.zeros((len(sim_t), 14))
 # Simulation
 for i in range(0, len(sim_t)):
     # if sim_t[i]-control_timer >= control_dt:
-    Current_state.w_radps = np.array([0,0,0])
-    Current_inputs.moments_npm = np.array([1, 0, 0])
+    Current_state.w_radps = np.array([1,0,0])
+    Current_inputs.moments_npm = np.array([0, 0, 0])
     Current_inputs.forces_n = np.array([0, 0, 0])
     kinematics.new_state(Current_state, Current_inputs, dt, g_mps2, Contrahopper)
 
 print(Current_state.attitude_Cb2i_dcm)
+

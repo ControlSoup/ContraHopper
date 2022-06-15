@@ -48,10 +48,9 @@ def state_derivative(State, Inputs, g_mps2, Mass_Properties, Resulting_State):
 
     # Converts the current angular rates to a DCM rate
     attitudedot_Cb2i_dcm = strapdown.rates2dcm(attitude_Cb2i_dcm,w_radps)
-
     Resulting_State.velocity_mps = velocity_mps
     Resulting_State.acceleration_mps2 = acceleration_mps2
-    Resulting_State.attitude_Cb2idot_dcm = attitudedot_Cb2i_dcm
+    Resulting_State.attitudedot_Cb2i_dcm = attitudedot_Cb2i_dcm    # Cdot_B2I
     Resulting_State.wdot_radps2 = wdot_radps2
 
 
@@ -68,9 +67,11 @@ def new_state(State, Inputs, dt, g_mps2, Mass_Properties):
 
     # 4th Order Runge Kutta Calculation
     # K1
-    k1 = Resulting_state(np.array([0, 0, 0]), np.array([0, 0, 0]), np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
+    k1 = Resulting_state(np.array([0, 0, 0]), np.array([0, 0, 0]), np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]]),
                          np.array([0, 0, 0]))
+
     state_derivative(State, Inputs, g_mps2, Mass_Properties, k1)
+
     # K2
     k2_dot = Rk4_class(np.array(State.position_m + k1.velocity_mps * dt / 2),
                        np.array(State.velocity_mps + k1.acceleration_mps2 * dt / 2),
@@ -98,14 +99,13 @@ def new_state(State, Inputs, dt, g_mps2, Mass_Properties):
     state_derivative(k4_dot, Inputs, g_mps2, Mass_Properties, k4)
 
     #Integration Results
-
     rk4_result = Rk4_class(State.position_m + (1 / 6 * (k1.velocity_mps + 2 * k2.velocity_mps + 2 * k3.velocity_mps + k4.velocity_mps) * dt),
                            State.velocity_mps + (1 / 6 * (k1.acceleration_mps2 + 2 * k2.acceleration_mps2 + 2 * k3.acceleration_mps2 + k4.acceleration_mps2) * dt),
                            State.attitude_Cb2i_dcm + (1 / 6 * (k1.attitudedot_Cb2i_dcm + 2 * k2.attitudedot_Cb2i_dcm + 2 * k3.attitudedot_Cb2i_dcm + k4.attitudedot_Cb2i_dcm) * dt),
                            State.w_radps + (1 / 6 * (k1.wdot_radps2 + 2 * k2.wdot_radps2 + 2 * k3.wdot_radps2 + k4.wdot_radps2) * dt))
 
 
-    rk4_result.attitude_Cb2i_dcm = strapdown.orthonormalize(rk4_result.attitude_Cb2i_dcm)
+    #rk4_result.attitude_Cb2i_dcm = strapdown.orthonormalize(rk4_result.attitude_Cb2i_dcm)
 
     State.position_m = rk4_result.position_m
     State.velocity_mps = rk4_result.velocity_mps
