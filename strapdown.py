@@ -1,28 +1,26 @@
 import numpy as np
-from numpy import sqrt,pi,sin,cos,tan,arctan,matmul
+from numpy import sqrt, pi, sin, cos, tan, arctan, matmul, identity, transpose
+from numpy.linalg import inv
 
 
 def dcm2euler(dcm):
-    [theta, psi, phi] = [0, 0, 0]
-
-    theta = arctan(-dcm[2][0] / sqrt(1 - (dcm[2][0] * dcm[2][0])))
+    psi = arctan(-dcm[2, 0] / sqrt(dcm[2, 1] ** 2 + dcm[2, 2] ** 2))
 
     if abs(dcm[2][0]) < 0.999:
-        psi = arctan(dcm[2][1] / dcm[2][2])
-        phi = arctan(dcm[1][0] / dcm[0][0])
+        theta = arctan(dcm[2, 1] / dcm[2, 2])
+        phi = arctan(dcm[1, 0] / dcm[0, 0])
     else:
         return "Unable to produce complete Euler angles >2pi"
     return np.array([theta, psi, phi])
 
 
 # the result matrix is replaced with a dcm equivalent of three euler angles
-def euler2dcm(euler=None, result=None):
+def euler2dcm(euler):
     if euler is None:
         euler = [0, 0, 0]
-    if result is None:
-        result = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    [pitch, roll, yaw] = euler
 
+    [pitch, roll, yaw] = euler
+    result = identity(3)
     result[0][0] = cos(pitch) * np.cos(yaw)
     result[0][1] = -np.cos(roll) * np.sin(yaw) + (np.sin(roll) * np.sin(pitch) * np.sin(yaw))
     result[0][2] = np.sin(roll) * np.sin(yaw) + (np.cos(roll) * np.sin(pitch) * np.cos(yaw))
@@ -51,13 +49,14 @@ def rates2dcm(dcm, w):
 
     return np.array(dcm_dot)
 
-def orthonormalize(dcm):
-    row_1 = dcm[0]/np.linalg.norm(dcm[0])
-    row_2 = dcm[1]/np.linalg.norm(dcm[1])
-    row_3 = dcm[2]/np.linalg.norm(dcm[2])
 
-    row_2 = np.cross(row_1,row_3)
-    row_3 = np.cross(row_1,row_2)
-    return np.array([row_1,row_2,row_3])
+def orthonormalize(Cbl_minus):
+    # pg  7-19
 
-#7.1.1.3-1 and 7.1.1.3-9 (7.1.1.3 7-18)
+    Esym = (matmul(Cbl_minus, transpose(Cbl_minus)) - identity(3)) / 2  # Error in the rows of the dcm
+
+    Cbl_plus = matmul(identity(3) - Esym, Cbl_minus)
+
+    return Cbl_plus
+
+# 7.1.1.3-1 and 7.1.1.3-9 (7.1.1.3 7-18)
