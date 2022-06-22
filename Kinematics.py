@@ -3,23 +3,44 @@
 import numpy as np
 import strapdown
 
+"""
+===========================
+Support Functions
+===========================
+"""
+
 
 def state2state_matrix(State):
+    """
+    Inputs: State in class form
+    Outputs: State in its matrix form
+    """
     return np.array([State.position_m,
-            State.velocity_mps,
-            State.attitude_Cb2i_dcm[0],
-            State.attitude_Cb2i_dcm[1],
-            State.attitude_Cb2i_dcm[2],
-            State.w_radps])
+                     State.velocity_mps,
+                     State.attitude_Cb2i_dcm[0],
+                     State.attitude_Cb2i_dcm[1],
+                     State.attitude_Cb2i_dcm[2],
+                     State.w_radps])
 
 
-def state_matrix2state(state_vector, State):
-    State.position_m = np.array(state_vector[0])
-    State.velocity_mps = np.array(state_vector[1])
-    State.attitude_Cb2i_dcm = np.array([state_vector[2],
-                               state_vector[3],
-                               state_vector[4]])
-    State.w_radps = np.array(state_vector[5])
+def state_matrix2state(state_matrix, State):
+    """
+    Inputs: State in matrix form
+    Outputs: State in its class form
+    """
+    State.position_m = np.array(state_matrix[0])
+    State.velocity_mps = np.array(state_matrix[1])
+    State.attitude_Cb2i_dcm = np.array([state_matrix[2],
+                                        state_matrix[3],
+                                        state_matrix[4]])
+    State.w_radps = np.array(state_matrix[5])
+
+
+"""
+===========================
+State Derivative
+===========================
+"""
 
 
 def get_state_derivative(state_matrix, Inputs, g_mps2, MassProperties):
@@ -55,8 +76,16 @@ def get_state_derivative(state_matrix, Inputs, g_mps2, MassProperties):
     # Converts the current angular rates to a DCM rate
     attitudedot_Cb2i_dcm = strapdown.rates2dcm(attitude_Cb2i_dcm, w_radps)
 
-    return np.array([velocity_mps, acceleration_mps2, attitudedot_Cb2i_dcm[0], attitudedot_Cb2i_dcm[1], attitudedot_Cb2i_dcm[2],
-            wdot_radps2])
+    return np.array(
+        [velocity_mps, acceleration_mps2, attitudedot_Cb2i_dcm[0], attitudedot_Cb2i_dcm[1], attitudedot_Cb2i_dcm[2],
+         wdot_radps2])
+
+
+"""
+===========================
+Integration
+===========================
+"""
 
 
 def rk4(state_matrix, Inputs, g_mps2, MassProperties, dt):
@@ -71,21 +100,27 @@ def rk4(state_matrix, Inputs, g_mps2, MassProperties, dt):
     return state_matrix + np.array((k1 + 2 * k2 + 2 * k3 + k4) * dt / 6)
 
 
+"""
+===========================
+Main Function to Call
+===========================
+"""
 
 
 def get_new_state(State, Inputs, g_mps2, MassProperties, dt):
-
     """
     Inputs: state, forces and moments, dt, gravity, mass and moment of inertia tensor at cg
     Primary Function: Rk4 integration of the state derivative
     Outputs: the new state based on these parameters
     """
 
-    state_matrix = state2state_matrix(State)
+    state_matrix = state2state_matrix(State)  # For ease of integration and operations
 
-    next_state_matrix = rk4(state_matrix, Inputs, g_mps2, MassProperties, dt)
+    next_state_matrix = rk4(state_matrix, Inputs, g_mps2, MassProperties, dt)  # Use Rk4 to get the new state
 
-    state_matrix2state(next_state_matrix, State)
-    State.attitude_Cb2i_dcm = strapdown.orthonormalize(State.attitude_Cb2i_dcm)
+    state_matrix2state(next_state_matrix, State)  # Return to its class form for use in the larger sim
+
+    State.attitude_Cb2i_dcm = strapdown.orthonormalize(State.attitude_Cb2i_dcm)  # Prevents integration an
+    # floating point errors from building
 
     return None

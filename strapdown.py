@@ -2,6 +2,12 @@ import numpy as np
 from numpy import sqrt, pi, sin, cos, tan, arctan, matmul, identity, transpose
 from numpy.linalg import inv
 
+"""
+===========================
+Chapter 3
+===========================
+"""
+
 
 def dcm2euler(dcm):
     psi = arctan(-dcm[2, 0] / sqrt(dcm[2, 1] ** 2 + dcm[2, 2] ** 2))
@@ -14,7 +20,6 @@ def dcm2euler(dcm):
     return np.array([theta, psi, phi])
 
 
-# the result matrix is replaced with a dcm equivalent of three euler angles
 def euler2dcm(euler):
     if euler is None:
         euler = [0, 0, 0]
@@ -36,10 +41,10 @@ def euler2dcm(euler):
 
 
 def rates2dcm(dcm, w):
-    '''
+    """
     Inputs : angular rates (w), and the current dcm
     Outpus : a dcm rate (dcm_dot)
-    '''
+    """
     # pg 3-52
     scew_sym = np.array([[0, -w[2], w[1]],
                          [w[2], 0, -w[0]],
@@ -48,6 +53,21 @@ def rates2dcm(dcm, w):
     dcm_dot = matmul(dcm, scew_sym)
 
     return np.array(dcm_dot)
+
+
+def dcm_error(dcm_target, dcm_current):
+    """
+    Inputs : Target dcm, and current dcm
+    Output : The error between these dcms
+    """
+    return np.array(np.matmul(dcm_target, np.transpose(dcm_current)))
+
+
+"""
+===========================
+Chapter 7
+===========================
+"""
 
 
 def orthonormalize(Cbl_minus):
