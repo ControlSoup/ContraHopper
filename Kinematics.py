@@ -59,7 +59,9 @@ def get_state_derivative(state_matrix, Inputs, g_mps2, MassProperties):
                          state_matrix[4]]  # Current attitude represented as a DCM from body to inertial frame
     w_radps = state_matrix[5]  # Current angular rate in radians per second
 
-    forces_n = Inputs.forces_n  # Forces acting about cg
+    forces_n = np.matmul(attitude_Cb2i_dcm,Inputs.forces_n)  # Forces acting in the body frame
+    # (corrected from inertial frame) (eq 3.1-21 and 3.1-12 from strapdown)
+
     moments_nm = Inputs.moments_nm  # Moments acting about cg
 
     # Kinematics Source: https://en.m.wikipedia.org/wiki/Rigid_body_dynamics

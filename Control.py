@@ -45,16 +45,16 @@ def control(TargetState, NavState, ControlGains, prev_I, prev_error, user_contro
     position_m = NavState.position_m
     velocity_mps = NavState.velocity_mps
     nav_C_B2I = NavState.attitude_Cb2i_dcm
-    wdot_radps = NavState.wdot_radps
+    w_radps = NavState.wdot_radps
 
 
 
     """
     Rate Controller
     """
-    rate_error = [target_wdot_radps[0] - wdot_radps[0],
-                  target_wdot_radps[1] - wdot_radps[1],
-                  target_wdot_radps[2] - wdot_radps[2]]
+    rate_error = [target_wdot_radps[0] - w_radps[0],
+                  target_wdot_radps[1] - w_radps[1],
+                  target_wdot_radps[2] - w_radps[2]]
     prev_rate_error = rate_error
 
     rate_output = [-rate_error[0] * ControlGains.kd[0],
