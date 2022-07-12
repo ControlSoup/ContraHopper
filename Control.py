@@ -1,5 +1,4 @@
 # File for Control
-import numpy as np
 import strapdown
 
 
@@ -11,16 +10,20 @@ class TargetState:
         self.target_wdot_radps = target_wdot_radps
 
 
-class Gains:
-    def __init__(self, kp, ki, kd):
-        self.kp = kp
-        self.ki = ki
-        self.kd = kd
+class ControlGains:
+    def __init__(self, rate_kp, euler_attitude_kp, euler_attitude_ki):
+        self.rate_kp = rate_kp
+        self.euler_attitude_kp = euler_attitude_kp
+        self.euler_attitude_ki = euler_attitude_ki
 
 
-ContraHopperGains = Gains(kp=[0, 0, 0],
-                          ki=[0, 0, 0],
-                          kd=[0, 0, 0])
+class ControlOutput:
+    def __init__(self, position_output, velocity_output, rate_output, euler_attitude_output):
+        self.position_output = position_output
+        self.velocity_output = velocity_output
+        self.rate_output = rate_output
+        self.euler_attitude_output = euler_attitude_output
+
 
 """
 ===========================
@@ -29,45 +32,29 @@ Control Algorithm
 """
 
 
-def control(TargetState, NavState, ControlGains, prev_I, prev_error, user_control):
+def control(TargetState, NavState, ControlGains, ControlOutput, prev_I, prev_rate_error, prev_C_B2I_error, user_control):
     """
     Contra Hopper's Control Algorithm
     """
 
     """
-    Target and Nav prasing
-    """
-    target_position_m = TargetState.target_position_m
-    target_velocity_mps = TargetState.target_velocity_mps
-    target_C_B2I = TargetState.target_C_B2I
-    target_wdot_radps = TargetState.target_wdot_radps
-
-    position_m = NavState.position_m
-    velocity_mps = NavState.velocity_mps
-    nav_C_B2I = NavState.attitude_Cb2i_dcm
-    w_radps = NavState.wdot_radps
-
-
-
-    """
     Rate Controller
     """
-    rate_error = [target_wdot_radps[0] - w_radps[0],
-                  target_wdot_radps[1] - w_radps[1],
-                  target_wdot_radps[2] - w_radps[2]]
+    rate_error = [TargetState.target_wdot_radps[0] - NavState.w_radps[0],
+                  TargetState.target_wdot_radps[1] - NavState.w_radps[1],
+                  TargetState.target_wdot_radps[2] - NavState.w_radps[2]]
     prev_rate_error = rate_error
 
-    rate_output = [-rate_error[0] * ControlGains.kd[0],
-                   -rate_error[1] * ControlGains.kd[1],
-                   -rate_error[2] * ControlGains.kd[2]]
+    ControlOutput.rate_output = [-rate_error[0] * ControlGains.rate_kp[0],
+                                 -rate_error[1] * ControlGains.rate_kp[1],
+                                 -rate_error[2] * ControlGains.rate_kp[2]]
     """
     Attitude Controller
     """
 
-    error_C_B2I = strapdown.dcm_error(target_C_B2I, nav_C_B2I)
+    error_C_B2I = strapdown.dcm_error(TargetState.target_C_B2I, NavState.C_B2I)
 
     prev_error_C_B2I = error_C_B2I
 
     euler_error = strapdown.dcm2euler(error_C_B2I)
 
-    return rate_output

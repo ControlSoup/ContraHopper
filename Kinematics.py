@@ -112,7 +112,6 @@ Main Function to Call
 def get_new_state(State, Inputs, g_mps2, MassProperties, dt):
     """
     Inputs: state, forces and moments, dt, gravity, mass and moment of inertia tensor at cg
-    Primary Function: Rk4 integration of the state derivative
     Outputs: the new state based on these parameters
     """
 

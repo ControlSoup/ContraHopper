@@ -1,6 +1,10 @@
 # file for allocation
 
-def allocator(pid_output):
-    #ALLOCATE!
+def allocator(ControlOutput):
+
+    #Need fake thrust curve
+    #Fake Voltage curves
+    #Fake Torque from vanes
+
 
     return None
