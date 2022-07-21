@@ -19,7 +19,7 @@ Sim Options
 """
 sim_frequency = 500
 start_time = 0
-end_time = 5
+end_time = 15
 isPlotting = False
 is3d = False
 
@@ -59,7 +59,7 @@ CurrentState = State(position_m=np.zeros(3), velocity_mps=np.zeros(3), attitude_
 CurrentInputs = Inputs(forces_n=np.zeros(3),
                        moments_nm=np.zeros(3))
 
-ContraHopper = VehicleProperties(mass_kg=1, i_tensor_cg=[[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+ContraHopper = VehicleProperties(mass_kg=10, i_tensor_cg=[[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 Gyroscope = VehicleProperties(mass_kg=0.26, i_tensor_cg=[[0.7, 0, 0.7], [0, 1, 0], [0.7, 0, -0.7]])
 
 g_mps2 = 0
@@ -76,17 +76,17 @@ stash_array = np.zeros((len(sim_t), 14))
 Sim Loop
 ===========================
 """
-CurrentState.w_radps = np.array([0, 0, 0])
+CurrentState.w_radps = np.array([0, 10, 0])
 for i in sim_t:
-    # CurrentInputs.forces_n = np.array([0, 0, 0])
-    # if i <= 5:
-    #     CurrentInputs.moments_nm = np.array([6, 0, 0])
-    # else:
-    #     CurrentInputs.moments_nm = np.array([0, 0, 0])
+    CurrentInputs.forces_n = np.array([0, 0, 0])
+    if i <= 5:
+        CurrentInputs.moments_nm = np.array([0.25, 0, -0.1])
+    else:
+        CurrentInputs.moments_nm = np.array([0, 0, 0])
 
-    CurrentInputs.forces_n = np.array([1, 0, 0.5])
-    CurrentInputs.moments_nm = np.array([0.25, 0.1, 0])
-    Kinematics.get_new_state(CurrentState, CurrentInputs, g_mps2, ContraHopper, dt)
+
+
+    Kinematics.get_new_state(CurrentState, CurrentInputs, g_mps2, Gyroscope, dt)
 
 """
 ===========================

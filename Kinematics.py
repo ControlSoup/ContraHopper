@@ -46,7 +46,6 @@ State Derivative
 def get_state_derivative(state_matrix, Inputs, g_mps2, MassProperties):
     """
     Inputs: State in matrix form, Forces and Moments about cg, Gravity , Vehicle Mass and Moment of Inerta Tensor at cg
-    Primary Function: 6dof kinematics
     Outputs: Derivative of the current state based on 6dof kinematics as a matrix for integration
     """
 
@@ -68,7 +67,6 @@ def get_state_derivative(state_matrix, Inputs, g_mps2, MassProperties):
 
     # Resulting acceleration from the forcing acting on the body
     acceleration_mps2 = forces_n / mass_kg
-    acceleration_mps2[2] = acceleration_mps2[2] - g_mps2
 
     # Resulting angular acceleration due to the moments acting on the body
     wdot_radps2 = np.matmul(np.linalg.inv(i_tensor_cg),

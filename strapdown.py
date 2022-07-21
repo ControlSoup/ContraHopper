@@ -43,7 +43,7 @@ def euler2dcm(euler):
 def rates2dcm(dcm, w):
     """
     Inputs : angular rates (w), and the current dcm
-    Outpus : a dcm rate (dcm_dot)
+    Outputs : a dcm rate (dcm_dot)
     """
     # pg 3-52
     scew_sym = np.array([[0, -w[2], w[1]],
