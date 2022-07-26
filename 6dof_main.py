@@ -78,11 +78,7 @@ Sim Loop
 """
 CurrentState.w_radps = np.array([0, 10, 0])
 for i in sim_t:
-    CurrentInputs.forces_n = np.array([0, 0, 0])
-    if i <= 5:
-        CurrentInputs.moments_nm = np.array([0.25, 0, -0.1])
-    else:
-        CurrentInputs.moments_nm = np.array([0, 0, 0])
+
 
 
 

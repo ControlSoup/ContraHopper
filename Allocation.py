@@ -8,3 +8,6 @@ def allocator(ControlOutput):
 
 
     return None
+
+def allocator_sim(ControlOutput):
+return None
