@@ -1,0 +1,174 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabu}
+\usepackage{caption}
+\usepackage[labelfont=bf, skip=5pt, font=small]{caption}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{standalone}
+\usepackage{import}
+\usepackage{stanli}
+\usepackage{tkz-euclide}
+\usetikzlibrary{calc}
+\usetikzlibrary{patterns,arrows.meta}
+\usetikzlibrary{shadows}
+\usetikzlibrary{external}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+\usepackage[font=footnotesize,labelfont=bf]{caption}
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+
+
+
+
+\let\DeclareUSUnit\DeclareSIUnit
+\let\US\SI
+\DeclareUSUnit\inch{in}
+\DeclareUSUnit\lbf{lbf}
+\DeclareUSUnit\lb{lb}
+\DeclareUSUnit\psi{psi}
+\DeclareUSUnit\ksi{ksi}
+\DeclareUSUnit\Msi{Msi}
+
+
+
+
+
+
+
+
+
+
+
+\begin{document}
+\subsubsection{Landing Gear}
+
+There are a couple different types of landing gear typically used on landers, shown bellow.
+
+SHOW FIGURE
+
+Based on research (Paper 1 , Paper 2) the tripod design offers the best specific strength between each design. This makes logical sense, as it is essentially just a truss (which at this point I am sure you can see I am a fan off).
+
+The first question I must answer in order to eventually get to the exact geometry of the landing gear. Is how big does my landing radius need to be? The landing radius as I am defining it is, based on the circle that intersects each foot of the landing gear. The minimum effective landing width is defined by the number of legs in this given landing radius. The more legs that are added, the larger this minimum effective landing width. This is important in calculating your worst case tip over. The worst case tip over will exist when the tipping axis is along the effective landing width.
+
+Landing is a complicated dynamic problem, I will be simplifying the problem by choosing a static tip over angle that is high in the hopes that this results in a large enough effective landing radius, to compensate for the complex behavior. In order to design more carefully, I would need to estimate potential side forces, kinetic friction of the landing surface and run rigid body simulations to accurately access dynamic tip over. Instead , I have chosen a static tip over angle of 50\unit{\degree} from horizontal for extreme stability. Because my landing gear is both symmetrical and square, I can also represent this in 2D. This means that the minimum effective landing radius, must not exceed the value calculated using Equation (#).
+
+\begin{figure}[h!]
+\centering
+ \resizebox{1\totalheight}{!}{\import{Structures/Diagrams/}{Tip_Over.tex}}
+\caption{Tip Over Diagram}
+\end{figure}
+\begin{description}
+    \item $\theta = $ Tip Over Angle 
+    \item $h_{cg} =$ Height of the Center of Gravity 
+    \item $l_w = $ Effective Landing Width
+    \item $F_g$ = Force of Gravity
+\end{description}
+
+\begin{equation}
+    l_w = 2 h_{cg} \sin{\theta}
+\end{equation}
+
+The height of the center of gravity with respect to the landing gear, is equal to the current height of the structure of the vehicle, plus a chosen two and a half inches of ground clearance. After the major mass components had finished design, this height came out to 8.947\unit{\inch}.
+
+\begin{gather*}
+    \centering
+    l_w = 2 * 8.947\unit{\inch} * \sin{50^\circ}
+\end{gather*}
+\begin{gather*}
+    \centering
+    l_w = 13.7\unit{\inch}
+\end{gather*}
+
+From this, using the derived sketch of the vehicle, the ground clearance and effective landing radius can be defined to generate the base coordinates of the landing gear truss members.
+
+Here is the equivalent landing leg truss based on the updated values:
+
+%Refrence https://latex.net/tikz-library-for-structural-analysis/#construction
+
+\begin{figure}[h!]
+\centering
+ \resizebox{.45\totalheight}{!}{\import{Structures/Diagrams/}{Landing_Leg_Truss.tex}}
+\caption{Equivalent Landing Leg Truss}
+\end{figure}
+
+%https://books.google.com/books?id=r5SqHWnmeHkC&printsec=frontcover&source=gbs_ge_summary_r&cad=0#v=onepage&q&f=false
+
+Estimated landing forces, as I have found is extremely difficult without building something, simulating something or using expensive analysis software. Originally, I was going to use a hand calculation based on the assumption of a rigid-body inelastic collision with the ground. Unfortunately, this requires a major assumption about the time duration of the impact. Resources online vary wildly for how long an impact takes to decelerate a body, a difference of a couple milliseconds can vary the load by 100x and more. I attempted to measure impact accelerations and estimate this time, using a drone dropped from various heights however the mems accelerometer that I am using even at its max full scale range of +-16gs, provided saturated and untrustworthy data of around 4gs. For this reason I will be adding a conservative fudge factor of 2, which is 8gs. This is not accurate and a simply a judgment call, and for the purposes of future vehicle design. I will be building a dedicated test stand to measure impact loads on landing. I will adjust the landing leg design once I have a better idea what these loads are. 
+
+Using the current estimated mass of the vehicle without landing legs (an assumption that needs to be considered for the FOS later, landing gear may increase the vehicle mass by 10\%) of 591.58\unit{\g}, the following landing load on the vehicle was calculated:
+
+\begin{gather}
+    F_l~=~5m_vg~=~8~*~9.8055\unit[per-mode = fraction]{\m\per\s\squared} * 0.59158\unit{\kg}
+\end{gather}
+
+Now that the landing load is known, the problem is statically determinate and requires only analysis at the food joint. The force on landing is distributed to each leg.
+
+\begin{figure}[h!]
+\centering
+\import{Structures/Diagrams/}{FBD_foot.tex}
+\caption{FBD of Joint A}
+\end{figure}
+
+\begin{description}
+    \item Vector Components:
+    \item $\frac{F_l}{4}$ [0i + 0j + 1k]
+    \item $F_c$ [0i + 0.51282263j  + 0.85849458k]
+    \item $F_{t_1}$ [0.22127908i + 0.74661525j + 0.62737647k]
+    \item $F_{t_2}$ = $F_2$ [-0.2212790i + 0.74661525j + 0.62737647k]
+\end{description}
+
+Assuming all members are in tension (despite the intuition shown in the FBD) the following static equations can be derived:
+
+\begin{gather}
+\begin{aligned}
+    & \Sigma F_i~=~F_{t_1}i~-~F_{t_1}i~=~0
+    \\
+    & \Sigma F_j~=~F_cj~+~2~F_{t_1}j~=~0 
+    \\
+    & \Sigma F_k~=~\frac{F_l}{4}k~+~F_ck~+~2F_{t_1}k~=~0 
+\end{aligned}
+\end{gather}
+
+\pagebreak
+
+Supplementing the design figure of 5 times standard gravity landing force, mass of the vehicle($m_v$) and simplifying:
+\begin{gather}
+\begin{aligned}
+   & \frac{F_l}{4} = \frac{m_va}{4} = \frac{5m_vg}{4} = 7.256\unit{\N}
+    \\
+    & 0.512~F_c~+~1.493~F_{t_1}~=~0 
+    \\
+    & 0.858~F_c~+~1.254~F_{t_1}~= -11.6\unit{\N}
+\end{aligned}
+\end{gather}
+Solving the system of equations:
+\begin{gather}
+\begin{aligned}
+    &F_c = -27.15\unit{\n}
+    \\
+    &F_{t_1} = F_{t_2} = 9.32\unit{\N}
+\end{aligned}
+\end{gather}
+Negative values indicating the member is in compression. Now that the loads have been established, an optimization for the minimum weight cross section can be preformed based on the following design factors.
+\\
+\begin{description}
+   \item Failure Mode (Compression Member) = Buckling\\\\
+   \item Target Factor of Safety on Ultimate (Compression Member) = 4
+    \item Failure Mode (Tension Member) = Tensile
+    \item Target Factor of Safety on Ultimate = 2.5
+\end{description}
+\end{document}
