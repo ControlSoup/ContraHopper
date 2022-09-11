@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.9.9)  9 SEP 2022 22:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.9.9)  10 SEP 2022 19:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**"./Impact Investigation.tex"
-(Impact Investigation.tex
+**./Landing_Legs.tex
+(Landing_Legs.tex
 LaTeX2e <2022-06-01> patch level 5
 L3 programming layer <2022-08-30>
 (C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -982,298 +982,51 @@ File: tikzlibrarypatterns.code.tex 2021/05/15 v3.1.9a (3.1.9a)
 arypatterns.code.tex
 File: pgflibrarypatterns.code.tex 2021/05/15 v3.1.9a (3.1.9a)
 )))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-euclide
-.sty
-2022/08/24 4.23c tkz-euclide.sty
-Package: tkz-euclide  2022/08/24 4.23c for pure Euclidean Geometry 
-
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryangles.code.tex
-File: tikzlibraryangles.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
-aryarrows.meta.code.tex
-File: pgflibraryarrows.meta.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-\pgfarrowinset=\dimen337
-\pgfarrowlength=\dimen338
-\pgfarrowwidth=\dimen339
-\pgfarrowlinewidth=\dimen340
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarybackgrounds.code.tex
-File: tikzlibrarybackgrounds.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-\pgf@layerbox@background=\box102
-\pgf@layerboxsaved@background=\box103
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarydecorations.markings.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
-ions\pgflibrarydecorations.markings.code.tex))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarydecorations.shapes.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
-ions\pgflibrarydecorations.shapes.code.tex))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarydecorations.text.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
-ions\pgflibrarydecorations.text.code.tex
-\pgf@lib@dec@text@box=\box104
-)
-\tikz@lib@dec@te@box=\box105
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryintersections.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
-aryintersections.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
-aryfpu.code.tex)
-\pgf@intersect@solutions=\count340
-))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarymath.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryfpu.code.tex)
-\tikz@math@for@depth=\count341
-\tikz@math@dimen=\dimen341
-\tikz@math@toks=\toks46
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryplotmarks.code.tex
-File: tikzlibraryplotmarks.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
-aryplotmarks.code.tex
-File: pgflibraryplotmarks.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryquotes.code.tex
-File: tikzlibraryquotes.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarythrough.code.tex
-File: tikzlibrarythrough.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xfp\xfp.sty
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
-Package: expl3 2022-08-30 L3 programming layer (loader) 
+Package hyperref Info: Option `colorlinks' set `true' on input line 25.
+Package translations Info: No language package found. I am going to use `englis
+h' as default language. on input line 52.
 
 (C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2022-08-30 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count342
-\l__pdf_internal_box=\box106
-))
-Package: xfp 2022-06-22 L3 Floating point unit
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/xpatch\xpatch.sty
-Package: xpatch 2020/03/25 v0.3a Extending etoolbox patching commands
+\l__color_backend_stack_int=\count340
+\l__pdf_internal_box=\box102
+) (Landing_Legs.aux)
+\openout1 = `Landing_Legs.aux'.
 
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xpars
-e.sty
-Package: xparse 2022-06-22 L3 Experimental document command parser
-))
-\tkzRadius=\dimen342
-\tkzLength=\dimen343
-\tkz@radi=\dimen344
-\tkz@ax=\dimen345
-\tkz@ay=\dimen346
-\tkz@bx=\dimen347
-\tkz@by=\dimen348
-\tkz@cx=\dimen349
-\tkz@cy=\dimen350
-\tkz@dx=\dimen351
-\tkz@dy=\dimen352
-\tkz@cntmk=\count343
-
-Local configuration file tkz-euclide.cfg found and used
-
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-euclide
-.cfg
-2022/08/24 4.23c tkz-euclide.cfg
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-base.tex
-2022/08/24 4.23c tkz-tools-eu-base.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-utilities.tex
-2022/08/24 4.23c tkz-tools-eu-utilities.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-BB.tex
-2022/08/24 4.23c tkz-obj-eu-BB.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-grids.tex
-2022/08/24 4.23c tkz-obj-eu-grids.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-lib-eu-
-marks.tex
-2022/08/24 4.23c tkz-lib-eu-marks.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-text.tex
-2022/08/24 4.23c tkz-tools-eu-text.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-lib-eu-
-shape.tex
-2022/08/24 4.23c tkz-lib-eu-shape.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-axesmin.tex
-2022/08/24 4.23c tkz-obj-eu-axesmin
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-colors.tex
-2022/08/24 4.23c tkz-tools-eu-colors
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-points.tex
-2022/08/24 4.23c tkz-obj-eu-points.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-draw-points.tex
-2022/08/24 4.23c tkz-obj-eu-points.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-angles.tex
-2022/08/24 4.23c tkz-tools-eu-angles.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-intersections.tex
-2022/08/24 4.23c tkz-tools-eu-intersections.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-tools-e
-u-math.tex
-2022/08/24 4.23c tkz-tools-eu-math.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-compass.tex
-2022/08/24 4.23c tkz-obj-eu-compass.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-circles.tex
-2022/08/24 4.23c tkz-obj-eu-circles.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-circles-by.tex
-2022/08/24 4.23c tkz-obj-eu-circles.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-draw-angles.tex
-2022/08/24 4.23c tkz-tool-eu-angles.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-draw-circles.tex
-2022/08/24 4.23c tkz-obj-eu-draw-circles.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-draw-lines.tex
-2022/08/24 4.23c tkz-obj-eu-draw-lines.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-draw-polygons.tex
-2022/08/24 4.23c tkz-obj-eu-polygons.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-draw-triangles.tex
-2022/08/24 4.23c tkz-obj-eu-draw-triangles.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-lines.tex
-2022/08/24 4.23c tkz-obj-eu-lines.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-points-by.tex
-2022/08/24 4.23c tkz-tools-eu-points-by.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-points-rnd.tex
-2022/08/24 4.23c tkz-obj-eu-points-rnd.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-points-spc.tex
-2022/08/24 4.23c tkz-obj-eu-points.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-points-with.tex
-2022/08/24 4.23c tkz-obj-eu-points-with.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-polygons.tex
-2022/08/24 4.23c tkz-obj-eu-polygons.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-protractor.tex
-2022/08/24 4.23c tkz-obj-eu-protractor.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-sectors.tex
-2022/08/24 4.23c tkz-obj-eu-sectors.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-show.tex
-2022/08/24 4.23c tkz-obj-eu-show.tex
-)
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/tkz-euclide\tkz-obj-eu-
-triangles.tex
-2022/08/24 4.23c tkz-obj-eu-triangles.tex
-))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryshadows.code.tex
-File: tikzlibraryshadows.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibraryfadings.code.tex
-File: tikzlibraryfadings.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
-aryfadings.code.tex
-File: pgflibraryfadings.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-)))
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer/libra
-ries\tikzlibraryexternal.code.tex
-(C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzexternalshared.code.tex))
-Package hyperref Info: Option `colorlinks' set `true' on input line 27.
-Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 54.
- (Impact Investigation.aux)
-\openout1 = `"Impact Investigation.aux"'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
 
 (C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count344
-\scratchdimen=\dimen353
-\scratchbox=\box107
-\nofMPsegments=\count345
-\nofMParguments=\count346
-\everyMPshowfont=\toks47
-\MPscratchCnt=\count347
-\MPscratchDim=\dimen354
-\MPnumerator=\count348
-\makeMPintoPDFobject=\count349
-\everyMPtoPDFconversion=\toks48
+\scratchcounter=\count341
+\scratchdimen=\dimen337
+\scratchbox=\box103
+\nofMPsegments=\count342
+\nofMParguments=\count343
+\everyMPshowfont=\toks46
+\MPscratchCnt=\count344
+\MPscratchDim=\dimen338
+\MPnumerator=\count345
+\makeMPintoPDFobject=\count346
+\everyMPtoPDFconversion=\toks47
 )
 (C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -1322,10 +1075,10 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 54.
-(Impact Investigation.out) (Impact Investigation.out)
+Package hyperref Info: Link coloring ON on input line 52.
+(Landing_Legs.out) (Landing_Legs.out)
 \@outlinefile=\write4
-\openout4 = `"Impact Investigation.out"'.
+\openout4 = `Landing_Legs.out'.
 
 
 (C:\Users\JoeWi\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\tran
@@ -1334,59 +1087,96 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 54.
+or `english'. on input line 52.
+<Landing_Legs_Fig/types_of_landing_legs.png, id=10, 671.50874pt x 278.54062pt>
+File: Landing_Legs_Fig/types_of_landing_legs.png Graphic file (type png)
+<use Landing_Legs_Fig/types_of_landing_legs.png>
+Package pdftex.def Info: Landing_Legs_Fig/types_of_landing_legs.png  used on in
+put line 59.
+(pdftex.def)             Requested size: 406.51875pt x 168.62172pt.
+<Landing_Legs_Fig/Landing_Radius.pdf, id=14, 2564.495pt x 610.05516pt>
+File: Landing_Legs_Fig/Landing_Radius.pdf Graphic file (type pdf)
+<use Landing_Legs_Fig/Landing_Radius.pdf>
+Package pdftex.def Info: Landing_Legs_Fig/Landing_Radius.pdf  used on input lin
+e 68.
+(pdftex.def)             Requested size: 406.51875pt x 96.69856pt.
  [1
 
-{C:/Users/JoeWi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<Impact_Fig/6in.png, id=55, 462.528pt x 346.896pt>
-File: Impact_Fig/6in.png Graphic file (type png)
-<use Impact_Fig/6in.png>
-Package pdftex.def Info: Impact_Fig/6in.png  used on input line 108.
-(pdftex.def)             Requested size: 406.51875pt x 304.90417pt.
-<Impact_Fig/1ft.png, id=57, 462.528pt x 346.896pt>
-File: Impact_Fig/1ft.png Graphic file (type png)
-<use Impact_Fig/1ft.png>
-Package pdftex.def Info: Impact_Fig/1ft.png  used on input line 113.
-(pdftex.def)             Requested size: 406.51875pt x 304.90417pt.
+{C:/Users/JoeWi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./Landing_Le
+gs_Fig/types_of_landing_legs.png> <./Landing_Legs_Fig/Landing_Radius.pdf>]
+<Landing_Legs_Fig/Tip_Over.pdf, id=29, 419.1389pt x 352.11148pt>
+File: Landing_Legs_Fig/Tip_Over.pdf Graphic file (type pdf)
+<use Landing_Legs_Fig/Tip_Over.pdf>
+Package pdftex.def Info: Landing_Legs_Fig/Tip_Over.pdf  used on input line 79.
+(pdftex.def)             Requested size: 243.90959pt x 204.90714pt.
+ [2 <./Landing_Legs_Fig/Tip_Over.pdf>]
+<Landing_Legs_Fig/Landing_Leg_Truss.pdf, id=45, 465.48505pt x 647.50208pt>
+File: Landing_Legs_Fig/Landing_Leg_Truss.pdf Graphic file (type pdf)
+<use Landing_Legs_Fig/Landing_Leg_Truss.pdf>
+Package pdftex.def Info: Landing_Legs_Fig/Landing_Leg_Truss.pdf  used on input 
+line 112.
+(pdftex.def)             Requested size: 243.90959pt x 339.2916pt.
 
+[3 <./Landing_Legs_Fig/Landing_Leg_Truss.pdf>]
+<Landing_Legs_Fig/FBD_point_A.pdf, id=73, 66.27058pt x 129.21072pt>
+File: Landing_Legs_Fig/FBD_point_A.pdf Graphic file (type pdf)
+<use Landing_Legs_Fig/FBD_point_A.pdf>
+Package pdftex.def Info: Landing_Legs_Fig/FBD_point_A.pdf  used on input line 1
+29.
+(pdftex.def)             Requested size: 81.30043pt x 158.52603pt.
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Underfull \hbox (badness 10000) in paragraph at lines 175--177
 
-<Impact_Fig/2ft.png, id=58, 462.528pt x 346.896pt>
-File: Impact_Fig/2ft.png Graphic file (type png)
-<use Impact_Fig/2ft.png>
-Package pdftex.def Info: Impact_Fig/2ft.png  used on input line 118.
-(pdftex.def)             Requested size: 406.51875pt x 304.90417pt.
+ []
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[2 <./Impact_Fig/6in.png>] [3 <./Impact_Fig/1ft.png> <./Impact_Fig/2ft.png>]
-(Impact Investigation.aux)
-Package rerunfilecheck Info: File `"Impact Investigation".out' has not changed.
-
-(rerunfilecheck)             Checksum: 1B2303AB34E71DE865E264AB7EA36ED4;267.
+[4 <./Landing_Legs_Fig/FBD_point_A.pdf>]
+<Landing_Legs_Fig/Landing_Leg_Optimization_Logic.pdf, id=117, 430.5957pt x 101.
+98502pt>
+File: Landing_Legs_Fig/Landing_Leg_Optimization_Logic.pdf Graphic file (type pd
+f)
+<use Landing_Legs_Fig/Landing_Leg_Optimization_Logic.pdf>
+Package pdftex.def Info: Landing_Legs_Fig/Landing_Leg_Optimization_Logic.pdf  u
+sed on input line 193.
+(pdftex.def)             Requested size: 406.51875pt x 96.2814pt.
+ [5 <./Landing_Legs_Fig/Landing_Leg_Optimization_Logic.pdf>]
+<Landing_Legs_Fig/End.png, id=139, 594.72188pt x 445.665pt>
+File: Landing_Legs_Fig/End.png Graphic file (type png)
+<use Landing_Legs_Fig/End.png>
+Package pdftex.def Info: Landing_Legs_Fig/End.png  used on input line 227.
+(pdftex.def)             Requested size: 487.8192pt x 365.55647pt.
+ [6 <./Landing_Legs_Fig/End.png>] (Landing_Legs.aux)
+Package rerunfilecheck Info: File `Landing_Legs.out' has not changed.
+(rerunfilecheck)             Checksum: BE6AC5E3282B90C062CE32847772DF73;116.
  ) 
 Here is how much of TeX's memory you used:
- 36319 strings out of 475389
- 803581 string characters out of 2777001
- 1138845 words of memory out of 3000000
- 56964 multiletter control sequences out of 15000+600000
- 474227 words of font info for 45 fonts, out of 8000000 for 9000
+ 31861 strings out of 475389
+ 682798 string characters out of 2777001
+ 1010003 words of memory out of 3000000
+ 52686 multiletter control sequences out of 15000+600000
+ 473284 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 100i,15n,103p,1192b,888s stack positions out of 10000i,1000n,20000p,200000b,80000s
- <C:\Users\JoeWi\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
-1200.pk><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmbx10.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmbx12.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmex10.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/JoeWi/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/JoeWi/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/JoeWi/App
-Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/J
-oeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on "Impact Investigation.pdf" (3 pages, 205611 bytes).
+ 100i,14n,103p,1172b,907s stack positions out of 10000i,1000n,20000p,200000b,80000s
+<C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmbx10.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmbx12.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmmi10.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/JoeWi/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/JoeWi/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/JoeWi/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/JoeWi/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users
+/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
+17.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmr5.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmr6.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmr8.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/JoeWi/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/JoeWi/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/stix/stix-mathit.pfb>
+Output written on Landing_Legs.pdf (6 pages, 443293 bytes).
 PDF statistics:
- 117 PDF objects out of 1000 (max. 8388607)
- 11 named destinations out of 1000 (max. 500000)
- 148 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 197 PDF objects out of 1000 (max. 8388607)
+ 17 named destinations out of 1000 (max. 500000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
 
