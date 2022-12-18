@@ -1,1 +1,6 @@
-#include <C_vserion/6dof_head.h>
+#include "6dof_head.h"
+
+int main()
+{
+    return 0;
+}   
