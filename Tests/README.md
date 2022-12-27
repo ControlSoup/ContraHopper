@@ -1,7 +1,11 @@
-# ContraHopper
-The ContraHopper is a small rotor craft using two counter rotating propellers and jet vanes to maintain attitude and altitude. This project is a personal project with unnecessary constraints to mimic the control of VTVL rockets. 
+# Tests
 
-This repository is not intended for collaborative use at this time.
+This folder contains diffrent informal test reports that where made in the process of designing and operating ContraHopper. 
 
-## Folder Structure
-Each folder acts as a container for a part of the project, these will eventually hold all files that I used to design an operate ContraHopper for better or for worse. Currently every folder is a work in progress, many contain their own README.md with an overview a list of TO-DOs.  
+## Impact Test
+
+###### Overview
+While attempting to design the laning legs, I found out that in order to determin impact loads, you need to make an assumption about impact duration or the deceleration distance on impact. The assumption made here dramatically changes the expected loads. Because of this I attempted to do a series of drop tests to measure impact G's. 
+
+###### Conclusion
+Using a MEM's accelerometer is a poor choice for imapct testing, the results staturated at 4gs. I chose to design to double this saturated result (8gs) with knowledge that harware testing would be needed in the future. 
