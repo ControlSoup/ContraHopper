@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 """
 ===========================
 Inputs
-===========================plot_position
+===========================
 """
 # Sim Options
 sim_frequency    = 500.0
@@ -73,9 +73,6 @@ for i in range(len(itt_sim)):
     # Store state as a state_vector for plotting
     stash_position_m[i] = CurrentState.position_m
     stash_velocity_mps[i] = CurrentState.velocity_mps
-    stash_Cb2o_dcm_a   = np.zeros((len(itt_sim),len(CurrentState.Cb2i_dcm[0])))
-    stash_Cb2o_dcm_b   = np.zeros((len(itt_sim),len(CurrentState.Cb2i_dcm[1])))
-    stash_Cb2o_dcm_c   = np.zeros((len(itt_sim),len(CurrentState.Cb2i_dcm[2])))
     
 
 
@@ -85,7 +82,7 @@ Data Presentation
 ===========================
 """
 plot_2d          = False
-plot_position_3d = True
+plot_position_3d = False
 print_final      = False
 
 if plot_2d:
