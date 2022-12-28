@@ -1,7 +1,11 @@
 import numpy as np
 import Kinematics
 import strapdown
+import pathlib
+from ctypes import *
 from matplotlib import pyplot as plt
+c_functions = CDLL(str(pathlib.Path(__file__).parent.resolve())+"..\..\..\FlightSoftware\\flight_software_sim.so")
+c_functions.flight_software_sim.restype = POINTER(c_double*6)
 """
 ===========================
 Inputs
@@ -27,6 +31,8 @@ init_moments_nm   = np.zeros(3)
 Initialization
 ===========================
 """ 
+
+
 CurrentAbsoluteState = Kinematics.State(position_m   = init_position_m, 
                                         velocity_mps = init_velocity_mps,
                                         Cb2i_dcm     = init_Cb2i_dcm,
@@ -75,7 +81,7 @@ for i in range(len(itt_sim)):
     stash_velocity_mps[i] = CurrentAbsoluteState.velocity_mps
     
 
-
+print(POINTER(POINTER(c_functions.flight_software_sim(CurrentAbsoluteState.state_matrix)),10.0,1.0))
 """
 ===========================
 Data Presentation
@@ -114,4 +120,4 @@ if print_final:
     print(f'Final Attitude (deg)       = {strapdown.dcm2euler(CurrentAbsoluteState.Cb2i_dcm)}\n')
     print(f'Final Angular Rate (rad/s) = {CurrentAbsoluteState.w_radps}')
 
-print(CurrentAbsoluteState.state_matrix)
+print(c_functions.flight_software_sim([0,0,0,0,0,0],10.0,1.0))
