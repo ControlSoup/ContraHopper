@@ -15,11 +15,11 @@ class State:
     '''
     def __init__(self,position_m=np.zeros(3),velocity_mps=np.zeros(3),
                  Cb2i_dcm=np.identity(3),w_radps=np.zeros(3)):
-        self.position_m      = position_m
-        self.velocity_mps    = velocity_mps
-        self.Cb2i_dcm        = Cb2i_dcm
-        self.w_radps         = w_radps
-        self.state_matrix    = np.array([position_m,velocity_mps,
+                 self.position_m      = position_m
+                 self.velocity_mps    = velocity_mps
+                 self.Cb2i_dcm        = Cb2i_dcm
+                 self.w_radps         = w_radps
+                 self.state_matrix    = np.array([position_m,velocity_mps,
                                          Cb2i_dcm[0],
                                          Cb2i_dcm[1],
                                          Cb2i_dcm[2],
@@ -30,7 +30,7 @@ class State:
         Overview:
             Updates current class properties
         Inputs:
-            state_matrix (np.array[18]) = Current state derivative in vector form
+            state_matrix (np.array[3][6]) = Current state derivative in vector form
         '''
         self.state_matrix = state_matrix
         self.position_m   = state_matrix[0]
@@ -82,11 +82,11 @@ State Derivative
 def get_state_derivative(state_matrix,Inputs,MassProperties):
     """
     Returns:
-        statedot_matrix (np.array[18]) = Current state derivative in vector form
+        statedot_matrix (np.array[3][6]) = Current state derivative in vector form
     Inputs: 
-        state_matrix    (np.array[18]) = Current state in vector form
-        Inputs          (Class)        = Forces and moments acting on the rigid body
-        MassProperties  (Class)        = Mass and inertia tensor of the rigid body
+        state_matrix    (np.array[3][6]) = Current state in vector form
+        Inputs          (Class)          = Forces and moments acting on the rigid body
+        MassProperties  (Class)          = Mass and inertia tensor of the rigid body
     Notes:
         Kinematics Source: https://en.m.wikipedia.org/wiki/Rigid_body_dynamics
     """
@@ -116,11 +116,11 @@ def get_state_derivative(state_matrix,Inputs,MassProperties):
 
     # Converts the current angular rates to a DCM rate
     Cb2idot_dcm = strapdown.rates2dcm(Cb2i_dcm, w_radps)
-
+    # Orthonormalize 
+    Cb2idot_dcm = strapdown.orthonormalize(Cb2idot_dcm) 
     return np.array([velocity_mps, acceleration_mps2, 
                      Cb2idot_dcm[0], Cb2idot_dcm[1], 
                      Cb2idot_dcm[2], wdot_radps2])
-
 
 """
 ===========================
@@ -128,16 +128,17 @@ Integration
 ===========================
 """
 
-
 def rk4(state_matrix, Inputs, MassProperties, dt):
     """
     Returns:
-        new_state_matrix (np.array[18]) = Rk4 integration of the current state
+        new_state_matrix (np.array[3][6]) = Rk4 integration of the current state
     Inputs: 
-        state_matrix     (np.array[18]) = Current state in vector form
+        state_matrix     (np.array[3][6]) = Current state in vector form
         Inputs           (Class)        = Forces and moments acting on the rigid body
         MassProperties   (Class)        = Mass and inertia tensor of the rigid body
         dt               (float)        = Time between integration steps 
+    Notes:
+        Source : https://medium.com/geekculture/runge-kutta-numerical-integration-of-ordinary-differential-equations-in-python-9c8ab7fb279c
     """
     
     k1 = get_state_derivative(state_matrix, Inputs, MassProperties)

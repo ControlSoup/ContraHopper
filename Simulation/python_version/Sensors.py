@@ -19,8 +19,8 @@ class Sensors:
     Stores measurments in vector and variable form.
     '''
     def __init__(self,accel_raw = np.zeros(3),sensor_vector = np.zeros(3)):
-        self.accel_raw       = accel_raw
-        self.sensor_vector   = np.array([self.accel_raw])
+                 self.accel_raw       = accel_raw
+                 self.sensor_vector   = np.array([self.accel_raw])
     
     def new_accel_raw(self,State):
         '''

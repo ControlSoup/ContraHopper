@@ -8,9 +8,9 @@ Inputs
 ===========================
 """
 # Sim Options
-sim_frequency    = 500.0
-start_time       = 0.0
-end_time         = 10.0
+sim_frequency     = 500.0
+start_time        = 0.0
+end_time          = 10.0
 
 # State Variables 
 init_position_m   = np.array([0,0,0.])
@@ -52,7 +52,7 @@ itt_sim = np.arange(start_time,end_time,dt)
 Data Collection
 =========================== 
 """
-# Pre-allocation of state_matrix (for plotting)
+# Pre-allocation of stash_state_matrix (for plotting)
 stash_position_m   = np.zeros((len(itt_sim),len(CurrentAbsoluteState.position_m)))
 stash_velocity_mps = np.zeros((len(itt_sim),len(CurrentAbsoluteState.velocity_mps)))
 stash_Cb2o_dcm_a   = np.zeros((len(itt_sim),len(CurrentAbsoluteState.Cb2i_dcm[0])))
@@ -66,12 +66,12 @@ Sim Loop
 """
 for i in range(len(itt_sim)):
 
-    #Update State
+    #Update State with rk4 integration
     CurrentAbsoluteState.update_from_state_matrix(Kinematics.rk4(CurrentAbsoluteState.state_matrix, CurrentInputs, ContraHopper, dt))
-    CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm) 
+    CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm)
 
     # Store state as a state_matrix for plotting
-    stash_position_m[i] = CurrentAbsoluteState.position_m
+    stash_position_m[i]   = CurrentAbsoluteState.position_m
     stash_velocity_mps[i] = CurrentAbsoluteState.velocity_mps
     
 
@@ -81,11 +81,11 @@ for i in range(len(itt_sim)):
 Data Presentation
 ===========================
 """
-plot_2d          = False
+plot_sim_raw     = False
 plot_position_3d = False
 print_final      = False
 
-if plot_2d:
+if plot_sim_raw:
     fig, axs = plt.subplots(2)
     axs[0].plot(itt_sim, stash_position_m[:,0],label = "Actual X",c = "red")
     axs[0].plot(itt_sim, stash_position_m[:,1],label = "Actual Y",c = "green")
