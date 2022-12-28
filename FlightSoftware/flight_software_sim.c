@@ -17,10 +17,7 @@ Inputs:
     time_s              (double) = Current time_s in secounds
     dt_s                (double) = Change in time between the last time this function was called in secounds
 */
-    sensor_matrix[0] = 69;
-    int i;
-    for (i =0; i<6; i++){
-        printf("%lf",sensor_matrix[i]);
-    }
+    sensor_matrix[0] = 69.0;
     return sensor_matrix;
 }
+

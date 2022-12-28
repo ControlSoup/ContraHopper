@@ -5,7 +5,8 @@ import pathlib
 from ctypes import *
 from matplotlib import pyplot as plt
 c_functions = CDLL(str(pathlib.Path(__file__).parent.resolve())+"..\..\..\FlightSoftware\\flight_software_sim.so")
-c_functions.flight_software_sim.restype = POINTER(c_double*6)
+c_functions.flight_software_sim.restype = POINTER(c_double)
+c_functions.flight_software_sim.argtypes = [POINTER(c_double),c_double,c_double]
 """
 ===========================
 Inputs
@@ -80,8 +81,6 @@ for i in range(len(itt_sim)):
     stash_position_m[i]   = CurrentAbsoluteState.position_m
     stash_velocity_mps[i] = CurrentAbsoluteState.velocity_mps
     
-
-print(POINTER(POINTER(c_functions.flight_software_sim(CurrentAbsoluteState.state_matrix)),10.0,1.0))
 """
 ===========================
 Data Presentation
@@ -120,4 +119,12 @@ if print_final:
     print(f'Final Attitude (deg)       = {strapdown.dcm2euler(CurrentAbsoluteState.Cb2i_dcm)}\n')
     print(f'Final Angular Rate (rad/s) = {CurrentAbsoluteState.w_radps}')
 
-print(c_functions.flight_software_sim([0,0,0,0,0,0],10.0,1.0))
+array = np.array([0,0,0,0,0,0],dtype=c_double)
+array = array.ctypes.data_as(POINTER(c_double))
+array_result = c_functions.flight_software_sim(array,10.0,1.0)
+array_result = np.array([array_result[0],array_result[1],array_result[2],
+                         array_result[3],array_result[4],array_result[5]])
+print(array_result)
+
+# array_result = np.ctypeslib.as_array(array_result)
+# print(array_result)
