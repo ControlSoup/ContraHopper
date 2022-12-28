@@ -13,10 +13,10 @@ start_time       = 0.0
 end_time         = 10.0
 
 # State Variables 
-init_position_m   = np.zeros(3)
+init_position_m   = np.array([0,0,0.])
 init_velocity_mps = np.array([1,0,0.])
 init_Cb2i_dcm     = np.identity(3)
-init_w_radps      = np.array([0,0,0])
+init_w_radps      = np.array([0,0,0.])
 
 # Inputs
 init_forces_n     = np.zeros(3)
@@ -27,10 +27,10 @@ init_moments_nm   = np.zeros(3)
 Initialization
 ===========================
 """ 
-CurrentState = Kinematics.State(position_m   = init_position_m, 
-                                velocity_mps = init_velocity_mps,
-                                Cb2i_dcm     = init_Cb2i_dcm,
-                                w_radps      = init_w_radps)
+CurrentAbsoluteState = Kinematics.State(position_m   = init_position_m, 
+                                        velocity_mps = init_velocity_mps,
+                                        Cb2i_dcm     = init_Cb2i_dcm,
+                                        w_radps      = init_w_radps)
 
 CurrentInputs = Kinematics.Inputs(forces_n = init_forces_n,
                                   moments_nm = init_moments_nm)
@@ -52,12 +52,12 @@ itt_sim = np.arange(start_time,end_time,dt)
 Data Collection
 =========================== 
 """
-# Pre-allocation
-stash_position_m   = np.zeros((len(itt_sim),len(CurrentState.position_m)))
-stash_velocity_mps = np.zeros((len(itt_sim),len(CurrentState.velocity_mps)))
-stash_Cb2o_dcm_a   = np.zeros((len(itt_sim),len(CurrentState.Cb2i_dcm[0])))
-stash_Cb2o_dcm_b   = np.zeros((len(itt_sim),len(CurrentState.Cb2i_dcm[0])))
-stash_Cb2o_dcm_c   = np.zeros((len(itt_sim),len(CurrentState.Cb2i_dcm[0])))
+# Pre-allocation of state_matrix (for plotting)
+stash_position_m   = np.zeros((len(itt_sim),len(CurrentAbsoluteState.position_m)))
+stash_velocity_mps = np.zeros((len(itt_sim),len(CurrentAbsoluteState.velocity_mps)))
+stash_Cb2o_dcm_a   = np.zeros((len(itt_sim),len(CurrentAbsoluteState.Cb2i_dcm[0])))
+stash_Cb2o_dcm_b   = np.zeros((len(itt_sim),len(CurrentAbsoluteState.Cb2i_dcm[0])))
+stash_Cb2o_dcm_c   = np.zeros((len(itt_sim),len(CurrentAbsoluteState.Cb2i_dcm[0])))
 
 """
 ===========================
@@ -67,12 +67,12 @@ Sim Loop
 for i in range(len(itt_sim)):
 
     #Update State
-    CurrentState.update_from_state_vector(Kinematics.rk4(CurrentState.state_vector, CurrentInputs, ContraHopper, dt))
-    CurrentState.Cb2i_dcm = strapdown.orthonormalize(CurrentState.Cb2i_dcm) 
+    CurrentAbsoluteState.update_from_state_matrix(Kinematics.rk4(CurrentAbsoluteState.state_matrix, CurrentInputs, ContraHopper, dt))
+    CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm) 
 
-    # Store state as a state_vector for plotting
-    stash_position_m[i] = CurrentState.position_m
-    stash_velocity_mps[i] = CurrentState.velocity_mps
+    # Store state as a state_matrix for plotting
+    stash_position_m[i] = CurrentAbsoluteState.position_m
+    stash_velocity_mps[i] = CurrentAbsoluteState.velocity_mps
     
 
 
@@ -106,11 +106,12 @@ if plot_position_3d:
     plt.show()
 
 if print_final:
-    print(f'Final Position (m)         = {CurrentState.position_m}\n')
-    print(f'Final Velocity (m/s)       = {CurrentState.velocity_mps}\n')
-    print(f'Final Attitude (dcm)       = {CurrentState.Cb2i_dcm[0]}')
-    print(f'                             {CurrentState.Cb2i_dcm[1]}')
-    print(f'                             {CurrentState.Cb2i_dcm[2]}\n')
-    print(f'Final Attitude (deg)       = {strapdown.dcm2euler(CurrentState.Cb2i_dcm)}\n')
-    print(f'Final Angular Rate (rad/s) = {CurrentState.w_radps}')
+    print(f'Final Position (m)         = {CurrentAbsoluteState.position_m}\n')
+    print(f'Final Velocity (m/s)       = {CurrentAbsoluteState.velocity_mps}\n')
+    print(f'Final Attitude (dcm)       = {CurrentAbsoluteState.Cb2i_dcm[0]}')
+    print(f'                             {CurrentAbsoluteState.Cb2i_dcm[1]}')
+    print(f'                             {CurrentAbsoluteState.Cb2i_dcm[2]}\n')
+    print(f'Final Attitude (deg)       = {strapdown.dcm2euler(CurrentAbsoluteState.Cb2i_dcm)}\n')
+    print(f'Final Angular Rate (rad/s) = {CurrentAbsoluteState.w_radps}')
 
+print(CurrentAbsoluteState.state_matrix)
