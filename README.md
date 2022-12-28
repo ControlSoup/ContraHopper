@@ -4,4 +4,4 @@ The ContraHopper is a small rotor craft using two counter rotating propellers an
 This repository is not intended for collaborative use at this time.
 
 ## Folder Structure
-Each folder acts as a container for a part of the project, these will eventually hold all files that I used to design an operate ContraHopper for better or for worse. Currently every folder is a work in progress, many contain their own README.md with an overview a list of TO-DOs.  
+Each folder acts as a container for a part of the project, these will eventually hold all files that I used to design an operate ContraHopper for better or for worse. Currently every folder is a work in progress, many contain their own README.md with an overview and and a list of TO-DOs.  
