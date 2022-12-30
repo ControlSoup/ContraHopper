@@ -26,12 +26,13 @@ class State:
         self.velocity_mps = np.array(velocity_mps)
         self.Cb2i_dcm     = np.array(Cb2i_dcm)
         self.w_radps      = np.array(w_radps)
-        self.state_vector = np.array([position_m[0],position_m[1],position_m[2],
-                                      velocity_mps[0],velocity_mps[1],velocity_mps[2],
-                                      Cb2i_dcm[0][0],Cb2i_dcm[0][1],Cb2i_dcm[0][2],
-                                      Cb2i_dcm[1][0],Cb2i_dcm[1][1],Cb2i_dcm[1][1],
-                                      Cb2i_dcm[2][0],Cb2i_dcm[2][1],Cb2i_dcm[2][2],
-                                      w_radps[0],w_radps[1],w_radps[2]])
+        self.state_vector = np.array([position_m,
+                                      velocity_mps,
+                                      Cb2i_dcm[0],
+                                      Cb2i_dcm[1],
+                                      Cb2i_dcm[2],
+                                      w_radps]).flatten()
+                    
                 
     def update_from_state_vector(self,state_vector):
         '''
@@ -40,7 +41,7 @@ class State:
         Inputs:
             state_vector (np.array[1x18]) = Current state in vector form
         '''
-        self.state_vector = state_vector
+        self.state_vector = np.array(state_vector)
         self.position_m   = np.array(self.state_vector[0:3])
         self.velocity_mps = np.array(self.state_vector[3:6])
         self.Cb2i_dcm     = np.array([self.state_vector[6:9],
@@ -55,12 +56,12 @@ class State:
         self.velocity_mps = np.array(velocity_mps)
         self.Cb2i_dcm     = np.array(Cb2i_dcm)
         self.w_radps      = np.array(w_radps)
-        self.state_vector = np.array([position_m[0],position_m[1],position_m[2],
-                                      velocity_mps[0],velocity_mps[1],velocity_mps[2],
-                                      Cb2i_dcm[0][0],Cb2i_dcm[0][1],Cb2i_dcm[0][2],
-                                      Cb2i_dcm[1][0],Cb2i_dcm[1][1],Cb2i_dcm[1][1],
-                                      Cb2i_dcm[2][0],Cb2i_dcm[2][1],Cb2i_dcm[2][2],
-                                      w_radps[0],w_radps[1],w_radps[2]])
+        self.state_vector = np.array([position_m,
+                                      velocity_mps,
+                                      Cb2i_dcm[0],
+                                      Cb2i_dcm[1],
+                                      Cb2i_dcm[2],
+                                      w_radps]).flatten()
 
 class Inputs:
     '''
@@ -75,8 +76,7 @@ class Inputs:
     def __init__(self,forces_n=np.zeros(3),moments_nm=np.zeros(3)):
         self.forces_n         =  forces_n
         self.moments_nm       =  moments_nm
-        self.input_vector     =  np.array([forces_n[0],forces_n[1],forces_n[2],
-                                           moments_nm[0],moments_nm[1],moments_nm[2]])
+        self.input_vector     =  np.array([forces_n,moments_nm]).flatten()
 
     def update_from_input_vector(self,input_vector):
         '''
@@ -85,18 +85,24 @@ class Inputs:
         Inputs:
             input_vector (np.array(6)) = Current inputs in vector form
         '''
-        self.input_vector     =  input_vector
+        self.input_vector     =  np.array(input_vector)
         self.forces_n         =  np.array(input_vector[0:3])
         self.moments_nm       =  np.array(input_vector[3:6])
 
     def update_from_properties(self,forces_n,moments_nm):
+        '''
+        Overview:
+            Updates current class properties
+        Inputs:
+            forces_n   = Current forces acting on the body in newtons (x,y,z)
+            moments_nm = Moments acting about cg (theta,psi,phi) in newtons per meter
+        '''
         self.forces_n         =  np.array(forces_n)
         self.moments_nm       =  np.array(moments_nm)
-        self.input_vector     =  np.array([forces_n[0],forces_n[1],forces_n[2],
-                                           moments_nm[0],moments_nm[1],moments_nm[2]])
+        self.input_vector     =  np.array([forces_n,moments_nm]).flatten()
 class MassProperties:
     '''
-    Contains all mass properties properties
+    Contains all mass properties
     '''
     def __init__(self,mass_kg = -10.0,i_tensor_cg = np.identity(3)):
                  self.mass_kg = mass_kg
@@ -147,12 +153,12 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     Cb2idot_dcm = strapdown.rates2dcm(Cb2i_dcm, w_radps)
     # Orthonormalize 
     Cb2idot_dcm = strapdown.orthonormalize(Cb2idot_dcm) 
-    return np.array([velocity_mps[0],velocity_mps[1],velocity_mps[2], 
-                     acceleration_mps2[0],acceleration_mps2[1],acceleration_mps2[2], 
-                     Cb2idot_dcm[0][0], Cb2idot_dcm[0][1],Cb2idot_dcm[0][2], 
-                     Cb2idot_dcm[1][0], Cb2idot_dcm[1][1],Cb2idot_dcm[1][2],
-                     Cb2idot_dcm[2][0], Cb2idot_dcm[2][1], Cb2idot_dcm[2][2],
-                     wdot_radps2[0],wdot_radps2[1],wdot_radps2[2]])
+    return np.array([velocity_mps, 
+                     acceleration_mps2, 
+                     Cb2idot_dcm[0], 
+                     Cb2idot_dcm[1],
+                     Cb2idot_dcm[2],
+                     wdot_radps2]).flatten()
 
 """
 ===========================
@@ -163,9 +169,9 @@ Integration
 def rk4(state_vector, Inputs, MassProperties, dt):
     """
     Returns:
-        new_state_matrix (np.array(18)) = Rk4 integration of the current state
+        new_state_vector (np.array(18)) = Rk4 integration of the current state
     Inputs: 
-        state_matrix     (np.array(18)) = Current state in vector form
+        state_vector     (np.array(18)) = Current state in vector form
         Inputs           (Class)        = Forces and moments acting on the rigid body
         MassProperties   (Class)        = Mass and inertia tensor of the rigid body
         dt               (float)        = Time between integration steps 
@@ -183,3 +189,18 @@ def rk4(state_vector, Inputs, MassProperties, dt):
 
 
     
+# Test State
+# TestState = State([9,9,9],[9,9,9],np.identity(3),[9,9,9])
+# print(TestState.position_m)
+# print(TestState.state_vector)
+# TestState.update_from_state_vector([1.,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
+# print(TestState.position_m)
+# print(TestState.state_vector)
+# TestState.update_from_properties(position_m=[1.,1,1],
+#                                  velocity_mps=[2.,2,2],
+#                                  Cb2i_dcm=[[1.,1,1],
+#                                            [6,7,9],
+#                                            [3,3,7]],
+#                                  w_radps=[1,1,1])
+# print(TestState.position_m)
+# print(TestState.state_vector)
