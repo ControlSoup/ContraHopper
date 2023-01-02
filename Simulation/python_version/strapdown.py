@@ -50,7 +50,7 @@ def rates2dcm(dcm, w):
                          [w[2], 0, -w[0]],
                          [-w[1], w[0], 0]])
 
-    dcm_dot = matmul(dcm, scew_sym)
+    dcm_dot = np.matmul(dcm, scew_sym)
 
     return np.array(dcm_dot)
 

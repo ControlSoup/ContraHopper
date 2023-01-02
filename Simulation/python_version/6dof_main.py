@@ -18,21 +18,21 @@ Inputs
 ===========================
 """
 # Sim Options
-sim_frequency     = 500.0
+sim_frequency     = 0.0
 start_time        = 0.0
-end_time          = 10.0
+end_time          = 50.0
 
 # State Variables 
 init_position_m   = np.array([0,0,0.])
-init_velocity_mps = np.array([0,0,0.])
+init_velocity_mps = np.array([1,0,0.])
 init_Cb2i_dcm     = np.array([[1,0,0],
                               [0,1,0],
                               [0,0,1.]])
-init_w_radps      = np.array([0,2*np.pi/end_time,0.])
+init_w_radps      = np.array([0,2*np.pi/10,0.])
 
 # Inputs
-init_forces_n     = np.array([0,0,0.])
-init_moments_nm   = np.array([0,0,0.])
+init_forces_n     = np.array([0,0,0])
+init_moments_nm   = np.array([0,0,0])
 
 np.random.seed(400)
 
@@ -81,8 +81,9 @@ Sim Loop
 
 for i in range(len(itt_sim)):
 
-    # Update State with rk4 integration
+    # Update State with rk4 integration, and orthonormalize the attidue
     CurrentAbsoluteState.update_from_state_vector(kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
+    CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm)
 
     # Update Inputs 
     CurrentInputs.update_from_properties(init_forces_n,
@@ -100,11 +101,11 @@ min_position_m_vector = np.array([min(stash_state_vector[:,0]),min(stash_state_v
 Data Presentation
 ===========================
 """
-plot_raw_2d      = True
 print_final      = True
 plot_position_3d = False
+plot_raw_2d      = False
 plot_position_2d = False
-plot_trajectory  = False
+plot_trajectory  = True
 plot_raw_3d      = False
 
 if plot_raw_3d:
