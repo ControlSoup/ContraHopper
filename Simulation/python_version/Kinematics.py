@@ -156,7 +156,7 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     Cb2idot_dcm       = strapdown.rates2dcm(Cb2i_dcm, w_radps)
 
     # Orthonormalize 
-    Cb2idot_dcm       = strapdown.orthonormalize(Cb2idot_dcm) 
+    #Cb2idot_dcm       = strapdown.orthonormalize(Cb2idot_dcm) 
     
     return np.array([velocity_mps, 
                      acceleration_mps2, 
