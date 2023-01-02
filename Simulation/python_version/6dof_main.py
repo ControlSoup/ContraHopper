@@ -23,9 +23,11 @@ end_time          = 10.0
 
 # State Variables 
 init_position_m   = np.array([0,0,0.])
-init_velocity_mps = np.array([0,0,0.])
-init_Cb2i_dcm     = np.identity(3)
-init_w_radps      = np.array([0,0,0.])
+init_velocity_mps = np.array([0,0,1.])
+init_Cb2i_dcm     = np.array([[0,0,1],
+                              [0,1,0],
+                              [1,0,0.]])
+init_w_radps      = np.array([0,1,0.])
 
 # Inputs
 init_forces_n     = np.array([0,0,0.])
@@ -82,8 +84,8 @@ for i in range(len(itt_sim)):
     CurrentAbsoluteState.update_from_state_vector(Kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
 
     # Update Inputs 
-    CurrentInputs.update_from_properties([np.random.uniform(-100,100),np.random.uniform(-100,100),np.random.uniform(-100,100)],
-                                         [np.random.uniform(-10,10),0,np.random.uniform(-10,10)])
+    CurrentInputs.update_from_properties([0,0,0],
+                                         [0,0,0.])
 
     # Store state as a state_vector for plotting
     stash_state_vector[i] = CurrentAbsoluteState.state_vector
@@ -173,31 +175,31 @@ if plot_trajectory:
         ax.plot3D(plot_data[:index+1, 0], 
                   plot_data[:index+1, 1], 
                   plot_data[:index+1, 2], 
-                  c='blue')
+                  c='black')
 
         # Updating Point Location 
         ax.scatter(plot_data[index, 0], 
                    plot_data[index, 1], 
                    plot_data[index, 2], 
-                   c='blue', marker='o')
+                   c='black', marker='o')
         # Origin
         # Adding Constant Origin X axis
         ax.plot3D([plot_data[0, 0],(plot_data[0, 0] + max_position_m/axis_scale)],
                   [plot_data[0, 1],plot_data[0, 1]], 
                   [plot_data[0, 2],plot_data[0, 2]],     
-                  c='black')
+                  c='red')
 
         # Adding Constant Origin Y axis
         ax.plot3D([plot_data[0, 0],plot_data[0, 0]],
                   [plot_data[0, 1],(plot_data[0, 1] + max_position_m/axis_scale)], 
                   [plot_data[0, 2],plot_data[0, 2]],     
-                  c='black')
+                  c='green')
 
         # Adding Constant Origin z axis
         ax.plot3D([plot_data[0, 0],plot_data[0, 0]],
                   [plot_data[0, 1],plot_data[0, 1]], 
                   [plot_data[0, 2],(plot_data[0, 2] + max_position_m/axis_scale)],     
-                  c='black')
+                  c='blue')
         
 
         # Oreientation self.state_vector[6:9]
@@ -205,7 +207,7 @@ if plot_trajectory:
         ax.plot3D([plot_data[index,0],(plot_data[index,0]+(plot_data[index,  6]*max_position_m/axis_scale))],
                   [plot_data[index,1],(plot_data[index,1]+(plot_data[index,  7]*max_position_m/axis_scale))],
                   [plot_data[index,2],(plot_data[index,2]+(plot_data[index,  8]*max_position_m/axis_scale))],    
-                  c='green')
+                  c='red')
         
         # Cb2i [1]
         ax.plot3D([plot_data[index,0],(plot_data[index,0]+(plot_data[index,  9]*max_position_m/axis_scale))],
@@ -217,7 +219,7 @@ if plot_trajectory:
         ax.plot3D([plot_data[index,0],(plot_data[index,0]+(plot_data[index, 12]*max_position_m/axis_scale))],
                   [plot_data[index,1],(plot_data[index,1]+(plot_data[index, 13]*max_position_m/axis_scale))],
                   [plot_data[index,2],(plot_data[index,2]+(plot_data[index, 14]*max_position_m/axis_scale))],    
-                  c='green')
+                  c='blue')
 
         # Setting Axes Limits
         ax.set_xlim3d([min_position_m, max_position_m])

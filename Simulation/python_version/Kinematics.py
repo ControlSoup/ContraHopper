@@ -137,7 +137,10 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     mass_kg      = MassProperties.mass_kg
     i_tensor_cg  = MassProperties.i_tensor_cg
 
-    # Calculate forces corected in the body frame (eq 3.1-21 and 3.1-12 Strapdown Analytics)
+    # Calculate velocity corrected in the body frame (eq 3.1-21 and 3.1-12 Strapdown Analytics)
+    velocity_mps = np.matmul(Cb2i_dcm,velocity_mps)
+
+    # Calculate forces corrected in the body frame 
     forces_n = np.matmul(Cb2i_dcm,forces_n)
 
     # Calculate acceleration from the forces acting on the body
