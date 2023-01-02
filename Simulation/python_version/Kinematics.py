@@ -138,10 +138,10 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     i_tensor_cg  = MassProperties.i_tensor_cg
 
     # Calculate velocity corrected in the body frame (eq 3.1-21 and 3.1-12 Strapdown Analytics)
-    velocity_mps = np.matmul(Cb2i_dcm,velocity_mps)
+    velocity_mps      = np.matmul(Cb2i_dcm,velocity_mps)
 
     # Calculate forces corrected in the body frame 
-    forces_n = np.matmul(Cb2i_dcm,forces_n)
+    forces_n          = np.matmul(Cb2i_dcm,forces_n)
 
     # Calculate acceleration from the forces acting on the body
     # a = F/m
@@ -149,13 +149,15 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
 
     # Calculate angular acceleration due to the moments acting on the body
     # w = I^-1(M-(w ×(Iw))
-    wdot_radps2 = np.matmul(np.linalg.inv(i_tensor_cg),
-                            (moments_nm - (np.cross(w_radps,(np.matmul(i_tensor_cg, w_radps))))))
+    wdot_radps2       = np.matmul(np.linalg.inv(i_tensor_cg),
+                                  (moments_nm - (np.cross(w_radps,(np.matmul(i_tensor_cg, w_radps))))))
 
     # Converts the current angular rates to a DCM rate
-    Cb2idot_dcm = strapdown.rates2dcm(Cb2i_dcm, w_radps)
+    Cb2idot_dcm       = strapdown.rates2dcm(Cb2i_dcm, w_radps)
+
     # Orthonormalize 
-    Cb2idot_dcm = strapdown.orthonormalize(Cb2idot_dcm) 
+    Cb2idot_dcm       = strapdown.orthonormalize(Cb2idot_dcm) 
+    
     return np.array([velocity_mps, 
                      acceleration_mps2, 
                      Cb2idot_dcm[0], 

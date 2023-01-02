@@ -1,11 +1,12 @@
 import numpy as np
-import Kinematics
+import kinematics
 import strapdown
 import pathlib
 from ctypes import *
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
+from unit_conversions import deg2rad,rad2deg
 # setup relevent C functions
 c_functions = CDLL(str(pathlib.Path(__file__).parent.resolve())+"..\..\..\FlightSoftware\\flight_software_sim.so")
 c_functions.flight_software_sim.restype = POINTER(c_double)
@@ -23,11 +24,11 @@ end_time          = 10.0
 
 # State Variables 
 init_position_m   = np.array([0,0,0.])
-init_velocity_mps = np.array([0,0,1.])
-init_Cb2i_dcm     = np.array([[0,0,1],
+init_velocity_mps = np.array([0,0,0.])
+init_Cb2i_dcm     = np.array([[1,0,0],
                               [0,1,0],
-                              [1,0,0.]])
-init_w_radps      = np.array([0,1,0.])
+                              [0,0,1.]])
+init_w_radps      = np.array([0,2*np.pi/end_time,0.])
 
 # Inputs
 init_forces_n     = np.array([0,0,0.])
@@ -42,20 +43,20 @@ Initialization
 """ 
 
 
-CurrentAbsoluteState = Kinematics.State(position_m   = init_position_m, 
+CurrentAbsoluteState = kinematics.State(position_m   = init_position_m, 
                                         velocity_mps = init_velocity_mps,
                                         Cb2i_dcm     = init_Cb2i_dcm,
                                         w_radps      = init_w_radps)
 
-CurrentInputs = Kinematics.Inputs(forces_n = init_forces_n,
+CurrentInputs = kinematics.Inputs(forces_n = init_forces_n,
                                   moments_nm = init_moments_nm)
 
-ContraHopper = Kinematics.MassProperties(mass_kg=10.0, 
+ContraHopper = kinematics.MassProperties(mass_kg=10.0, 
                                          i_tensor_cg=[[1, 0, 0], 
                                                       [0, 1, 0], 
                                                       [0, 0, 1.]])
 
-Gyroscope = Kinematics.MassProperties(mass_kg=0.26, 
+Gyroscope = kinematics.MassProperties(mass_kg=0.26, 
                                       i_tensor_cg=[[0.7,0,0.7], 
                                                    [0.0,1,0.0], 
                                                    [0.7,0,-0.7]])
@@ -81,11 +82,11 @@ Sim Loop
 for i in range(len(itt_sim)):
 
     # Update State with rk4 integration
-    CurrentAbsoluteState.update_from_state_vector(Kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
+    CurrentAbsoluteState.update_from_state_vector(kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
 
     # Update Inputs 
-    CurrentInputs.update_from_properties([0,0,0],
-                                         [0,0,0.])
+    CurrentInputs.update_from_properties(init_forces_n,
+                                         init_moments_nm)
 
     # Store state as a state_vector for plotting
     stash_state_vector[i] = CurrentAbsoluteState.state_vector
@@ -99,12 +100,12 @@ min_position_m_vector = np.array([min(stash_state_vector[:,0]),min(stash_state_v
 Data Presentation
 ===========================
 """
-plot_raw_3d      = False
-plot_raw_2d      = False
+plot_raw_2d      = True
+print_final      = True
 plot_position_3d = False
 plot_position_2d = False
-print_final      = False
-plot_trajectory  = True
+plot_trajectory  = False
+plot_raw_3d      = False
 
 if plot_raw_3d:
     fig, axs = plt.subplots(2)
@@ -144,12 +145,12 @@ if plot_position_2d:
     plt.show()
 
 if print_final:
-    print(f'Final Position (m)         = {CurrentAbsoluteState.position_m}\n')
-    print(f'Final Velocity (m/s)       = {CurrentAbsoluteState.velocity_mps}\n')
-    print(f'Final Attitude (dcm)       = {CurrentAbsoluteState.Cb2i_dcm[0]}')
+    print(f'Final Position    (m)      = {CurrentAbsoluteState.position_m}\n')
+    print(f'Final Velocity    (m/s)    = {CurrentAbsoluteState.velocity_mps}\n')
+    print(f'Final Attitude    (dcm)    = {CurrentAbsoluteState.Cb2i_dcm[0]}')
     print(f'                             {CurrentAbsoluteState.Cb2i_dcm[1]}')
     print(f'                             {CurrentAbsoluteState.Cb2i_dcm[2]}\n')
-    print(f'Final Attitude (deg)       = {strapdown.dcm2euler(CurrentAbsoluteState.Cb2i_dcm)}\n')
+    print(f'Final Attitude     (rad)   = {strapdown.dcm2euler(CurrentAbsoluteState.Cb2i_dcm)}\n')
     print(f'Final Angular Rate (rad/s) = {CurrentAbsoluteState.w_radps}')
 
 if plot_trajectory:
