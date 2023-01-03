@@ -1,16 +1,12 @@
 import numpy as np
 import kinematics
+import flightsoftware_model
 import strapdown
-import pathlib
-from ctypes import *
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import animation
 from unit_conversions import deg2rad,rad2deg
-# setup relevent C functions
-c_functions = CDLL(str(pathlib.Path(__file__).parent.resolve())+"..\..\..\FlightSoftware\\flight_software_sim.so")
-c_functions.flight_software_sim.restype = POINTER(c_double)
-c_functions.flight_software_sim.argtypes = [POINTER(c_double),c_double,c_double]
+
 
 """
 ===========================
@@ -18,17 +14,17 @@ Inputs
 ===========================
 """
 # Sim Options
-sim_frequency     = 0.0
+sim_frequency     = 250
 start_time        = 0.0
-end_time          = 50.0
+end_time          = 10.0
 
 # State Variables 
 init_position_m   = np.array([0,0,0.])
-init_velocity_mps = np.array([1,0,0.])
+init_velocity_mps = np.array([0,0,0.])
 init_Cb2i_dcm     = np.array([[1,0,0],
                               [0,1,0],
                               [0,0,1.]])
-init_w_radps      = np.array([0,2*np.pi/10,0.])
+init_w_radps      = np.array([0,0,0.])
 
 # Inputs
 init_forces_n     = np.array([0,0,0])
@@ -85,9 +81,12 @@ for i in range(len(itt_sim)):
     CurrentAbsoluteState.update_from_state_vector(kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
     CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm)
 
-    # Update Inputs 
-    CurrentInputs.update_from_properties(init_forces_n,
-                                         init_moments_nm)
+    # Control model (csim)
+    flightsoftware_model.control_sim(CurrentAbsoluteState,
+                                     flightsoftware_model.TargetState,
+                                     CurrentInputs,
+                                     flightsoftware_model.pid_storage,
+                                     dt)
 
     # Store state as a state_vector for plotting
     stash_state_vector[i] = CurrentAbsoluteState.state_vector
@@ -241,14 +240,3 @@ if plot_trajectory:
     line_ani = animation.FuncAnimation(fig, animate, interval=1,   
                                     frames=len(itt_plot))
     plt.show()
-
-
-
-# Array passing to a C function Test (works)
-# array = np.array([0,0,0,0,0,0],dtype=c_double)
-# array = array.ctypes.data_as(POINTER(c_double))
-# array_result = c_functions.flight_software_sim(array,axis_scale.0,1.0)
-# array_result = np.array([array_result[0],array_result[1],array_result[2],
-#                          array_result[3],array_result[4],array_result[5]])
-# print(array_result)
-
