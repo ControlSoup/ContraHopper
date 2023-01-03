@@ -3,59 +3,67 @@ import pathlib
 import kinematics
 from ctypes import *
 
-TargetState = kinematics.State(position_m=[0,0,10],
-                               velocity_mps=[0,0,0],
-                               Cb2i_dcm=[[1,0,0],
-                                         [0,1,0],
-                                         [0,0,1]],
-                               w_radps=[0,0,0])
+"""
+===========================
+Classess
+===========================
+"""
 
-# control function
-c_functions = CDLL(str(pathlib.Path(__file__).parent.resolve())+"..\..\..\FlightSoftware\Simulator\\flight_software_sim.so")
-c_functions.control.argtypes = [POINTER(c_double),POINTER(c_double),POINTER(c_double),c_double]
-c_functions.control.restype  = POINTER(c_double)
+class controller_3dof:
+    def __init__(self,
+                 Kp         = np.array([0,0,0.]),
+                 Ki         = np.array([0,0,0.]),
+                 Kd         = np.array([0,0,0.]),
+                 pid_I      = np.array([0,0,0.]),
+                 last_error = np.array([0,0,0.])):
+        self.Kp         = np.array(Kp)
+        self.Ki         = np.array(Ki)
+        self.Kd         = np.array(Kd)
+        self.pid_I      = np.array(pid_I)
+        self.last_error = np.array(last_error)
 
-pid_storage = np.array([0,0,0,0,                    # pos_x
-                        0,0,0,0,                    # pos_y
-                        1,0,0,0],dtype = c_double)  # pos_z
+"""
+===========================
+Functions
+===========================
+"""
+def control_model(EstimatedState,TargetState,PositionController,dt):
+    '''
+    Returns:
+        control_output_vector (np.array(6)) = Forces and moments disired by the controller
+    '''
+    # Position controller 
+    hover_N = 98.1 # How much thrust is requried for a hover
 
-def control_sim(State,TargetState,Inputs,pid_storage,dt):
-    # Convert state_vectors to c_double arrays 
-    c_state_vector        = np.array(State.state_vector,dtype = c_double).ctypes.data_as(POINTER(c_double))
-    c_target_state_vector = np.array(TargetState.state_vector,dtype = c_double).ctypes.data_as(POINTER(c_double))
-    c_pid_storage         = pid_storage.ctypes.data_as(POINTER(c_double))
-    control_output        = c_functions.control(c_state_vector,
-                                                c_target_state_vector,
-                                                c_pid_storage,dt) 
+    position_error = TargetState.position_m - EstimatedState.position_m
+    postiion_pid_result = np.zeros(3)
+    position_P          = np.zeros(3)
+    position_D          = np.zeros(3)
+    error_dot           = position_error- PositionController.last_error
 
-    # Parse control_ouput
+    for i in range(len(position_error)):
+        if (PositionController.pid_I[i] < 20 and PositionController.pid_I[i] > -20):
+            PositionController.pid_I[i] += position_error[i] * PositionController.Ki[i] * dt
+        else: 
+            PositionController.pid_I[i] = 0
 
-    # Position X
-    pid_storage[2] = control_output[6] 
-    pid_storage[3] = control_output[7] 
+        position_P[i] = position_error[i] * PositionController.Kp[i]
+        position_D[i] = error_dot[i] * PositionController.Kd[i] /dt
 
-    # Position Y
-    pid_storage[6] = control_output[8] 
-    pid_storage[7] = control_output[9] 
+    PositionController.last_error = position_error
+    postiion_pid_result = position_P + PositionController.pid_I + position_D
 
-    # Position Z
-    pid_storage[10] = control_output[10]
-    pid_storage[11] = control_output[11]
-    
-    Inputs.update_from_properties([control_output[0],control_output[1],control_output[2]],
-                                  [control_output[3],control_output[4],control_output[5]])
+    # Add hover constant to z_position
+    postiion_pid_result[2] += hover_N
+    return np.array([postiion_pid_result,[0,0,0]]).flatten()
 
-# Array passing to a C function Test (works)
-# array = np.array([0,0,0,0,0,0],dtype=c_double)
-# array = array.ctypes.data_as(POINTER(c_double))
-# array_result = c_functions.flight_software_sim(array,axis_scale.0,1.0)
-# array_result = np.array([array_result[0],array_result[1],array_result[2],
-#                          array_result[3],array_result[4],array_result[5]])
-# print(array_result)
 
-c_state_vector        = np.array(TargetState.state_vector,dtype = c_double).ctypes.data_as(POINTER(c_double))
-c_target_state_vector = np.array(TargetState.state_vector,dtype = c_double).ctypes.data_as(POINTER(c_double))
-c_pid_storage         = pid_storage.ctypes.data_as(POINTER(c_double))
-c_functions.control(c_state_vector,
-                    c_target_state_vector,
-                    c_pid_storage,0.05) 
+"""
+===========================
+Sim States
+===========================
+"""
+
+TargetState = kinematics.State(position_m = [3,3,2.])
+
+PositionController = controller_3dof(Kp = [10,10,10],Ki = [0.01,0.01,0.01], Kd = [3,3,3])
