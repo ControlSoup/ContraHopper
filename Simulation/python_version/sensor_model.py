@@ -22,11 +22,11 @@ class Sensors:
                  self.accel_raw       = accel_raw
                  self.sensor_vector   = np.array([self.accel_raw])
     
-    def new_accel_raw(self,State):
+    def get_accel_raw(self,State):
         '''
         Returns:
-            new_accel_raw  (np.array[3]) = new accel_rawerometer measurment 
-            sensor_vecotor (np.array[0][3])
+            new_accel_raw  (np.array(3)) = New accelerometer measurment 
+            sensor_vecotor (np.array(6)) = New udpdated sensor vector
         Inputs:
             State          (Class)       = Current absolute state (see Kinematics.py)
         '''
@@ -34,6 +34,15 @@ class Sensors:
         accel_variance = 6
         new_accel_raw  = add_noise(State.acceleration_mps2,accel_variance)
 
-        # Coonvert acceleration in m/s^2 to LSB (format the accelerometer actual outputs)    
+        # Convert acceleration in m/s^2 to LSB (format the accelerometer actual outputs)    
         accel2lsb      = 1046 
         self.accel_raw = new_accel_raw * accel2lsb
+    
+    def get_gyro_raw(self,State):
+        '''
+        Returns:
+            new_gyro_raw   (np.array(3)) = New gyro measumrnets [theta,phi,psi]
+            sensor_vecotor (np.array(6)) = New udpdated sensor vector
+        Inputs:
+            State          (Class)       = Current absolute state (see Kinematics.py)
+        '''
