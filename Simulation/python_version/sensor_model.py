@@ -4,11 +4,12 @@ from numpy.random import randn
 
 """
 ===========================
-Supporting function
+Supporting function and constants
 ===========================
 """
 mps2_2_lsb  = 4096
 radps_2_lsb = 1.143191 # (lsb2deg * deg2rad)
+
 def add_noise(mean,variance):
     # Returns a random data point based on gaussian inputs
     return mean + randn()*(np.sqrt(variance))
@@ -24,9 +25,8 @@ class Sensors:
     Stores measurments in vector and variable form.
     '''
     def __init__(self,
-                 accel_mps2 = np.zeros(3),
-                 gyro_radps = np.zeros(3),
-                 sensor_vector = np.zeros(6)):
+                 accel_mps2           = np.zeros(3),
+                 gyro_radps           = np.zeros(3)):
                  self.accel_lsb       = accel_mps2 * mps2_2_lsb
                  self.gyro_lsb        = gyro_radps * radps_2_lsb 
                  self.sensor_vector   = np.array([self.accel_lsb,self.gyro_lsb]).flatten()
@@ -40,13 +40,13 @@ class Sensors:
             State          (Class)       = Current absolute state (see Kinematics.py)
         '''
         # Generate a the current acceleration plus accelerometer noise
-        accel_variance_mps2     = 0.01
-        new_accel_mps2          = add_noise(Inputs.forces_n/MassProperties.mass_kg,accel_variance_mps2)
+        accel_variance_mps2     = 10
+        new_accel_mps2          = Inputs.forces_n/MassProperties.mass_kg
+        self.sensor_vector[0]   = add_noise(new_accel_mps2[0], accel_variance_mps2) * mps2_2_lsb
+        self.sensor_vector[1]   = add_noise(new_accel_mps2[1], accel_variance_mps2) * mps2_2_lsb
+        self.sensor_vector[2]   = add_noise(new_accel_mps2[2], accel_variance_mps2) * mps2_2_lsb
+        self.accel_lsb          = np.array([self.sensor_vector[0], self.sensor_vector[1], self.sensor_vector[2]])
 
-        # Convert acceleration in m/s^2 to LSB (format the accelerometer actual outputs)    
-        
-        self.accel_lsb          = new_accel_mps2 * mps2_2_lsb
-        self.sensor_vector[1:3] = self.accel_lsb
     def get_gyro_lsb(self,State,time):
         '''
         Returns:
@@ -55,14 +55,13 @@ class Sensors:
         Inputs:
             State          (Class)       = Current absolute state (see Kinematics.py)
         '''
-        gyro_variance_rad = 0.1
-        gyro_bias_rad     = 2
-        gyro_drift_radps  = 0.01
+        gyro_variance_rad       = 0.001
+        gyro_bias_rad           = 2
+        gyro_drift_radps        = 0.1
 
         # Calculate a new gyro measurment (+ bias + current_drift) and some noise
-        new_gyro_radps          = add_noise(State.w_radps + gyro_bias_rad + 
-                                            (gyro_drift_radps*time),gyro_variance_rad)
-        
-        
-        self.gyro_lsb           = new_gyro_radps * radps_2_lsb
-        self.sensor_vector[3:6] = self.get_gyro_lsb
+        new_gyro_radps          = State.w_radps  + gyro_bias_rad + (gyro_drift_radps * time)
+        self.sensor_vector[3]   = add_noise(new_gyro_radps[0], gyro_variance_rad) * radps_2_lsb
+        self.sensor_vector[4]   = add_noise(new_gyro_radps[1], gyro_variance_rad) * radps_2_lsb
+        self.sensor_vector[5]   = add_noise(new_gyro_radps[2], gyro_variance_rad) * radps_2_lsb
+        self.gyro_lsb           = np.array([self.sensor_vector[3], self.sensor_vector[4], self.sensor_vector[5]])

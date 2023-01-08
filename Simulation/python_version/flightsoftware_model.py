@@ -12,7 +12,6 @@ def ctype_array2np_array(ctype_arr,length):
     for i in range(length):
         
         new_np_array[i] = ctype_arr[i]
-    print(new_np_array)
     return new_np_array
 """
 ===========================
@@ -89,15 +88,15 @@ PositionController = controller_3dof(Kp = [10,10,10],Ki = [0.01,0.01,0.01], Kd =
 #                          array_result[3],array_result[4],array_result[5]])
 # print(array_result)
 
-test_array = np.array([1,2,3,4,5,6], dtype = c_double).ctypes.data_as(POINTER(c_double))
-test2_array = np.array([1,2,3,4,5,6], dtype = c_double).ctypes.data_as(POINTER(c_double))
-print("BEFOR")
-test_result = np.zeros(6,dtype = c_double).ctypes.data_as(POINTER(c_double))
-test_result_py = ctype_array2np_array(test_result,6)
-print(test_result[0],test_result[1],test_result[2],test_result[3])
-test_result_py = ctype_array2np_array(test_result,6)
-c_functions.control(test_array,test2_array,test_result)
-print("AFTER")
-print(test_result[0],test_result[1],test_result[2],test_result[3])
-test_result_py = ctype_array2np_array(test_result,6)
-#print(test_result_py)
+# test_array = np.array([1,2,3,4,5,6], dtype = c_double).ctypes.data_as(POINTER(c_double))
+# test2_array = np.array([1,2,3,4,5,6], dtype = c_double).ctypes.data_as(POINTER(c_double))
+# print("BEFOR")
+# test_result = np.zeros(6,dtype = c_double).ctypes.data_as(POINTER(c_double))
+# test_result_py = ctype_array2np_array(test_result,6)
+# print(test_result[0],test_result[1],test_result[2],test_result[3])
+# test_result_py = ctype_array2np_array(test_result,6)
+# c_functions.control(test_array,test2_array,test_result)
+# print("AFTER")
+# print(test_result[0],test_result[1],test_result[2],test_result[3])
+# test_result_py = ctype_array2np_array(test_result,6)
+# #print(test_result_py)
