@@ -1,13 +1,18 @@
 import numpy as np
 from numpy.random import randn
+
+
 """
 ===========================
 Supporting function
 ===========================
 """
+mps2_2_lsb  = 4096
+radps_2_lsb = 1.143191 # (lsb2deg * deg2rad)
 def add_noise(mean,variance):
     # Returns a random data point based on gaussian inputs
     return mean + randn()*(np.sqrt(variance))
+
 """
 ===========================
 Classes
@@ -18,31 +23,46 @@ class Sensors:
     '''
     Stores measurments in vector and variable form.
     '''
-    def __init__(self,accel_raw = np.zeros(3),sensor_vector = np.zeros(3)):
-                 self.accel_raw       = accel_raw
-                 self.sensor_vector   = np.array([self.accel_raw])
+    def __init__(self,
+                 accel_mps2 = np.zeros(3),
+                 gyro_radps = np.zeros(3),
+                 sensor_vector = np.zeros(6)):
+                 self.accel_lsb       = accel_mps2 * mps2_2_lsb
+                 self.gyro_lsb        = gyro_radps * radps_2_lsb 
+                 self.sensor_vector   = np.array([self.accel_lsb,self.gyro_lsb]).flatten()
     
-    def get_accel_raw(self,State):
+    def get_accel_lsb(self,Inputs,MassProperties):
         '''
         Returns:
-            new_accel_raw  (np.array(3)) = New accelerometer measurment 
+            new_accel_lsb  (np.array(3)) = New accelerometer measurment 
             sensor_vecotor (np.array(6)) = New udpdated sensor vector
         Inputs:
             State          (Class)       = Current absolute state (see Kinematics.py)
         '''
         # Generate a the current acceleration plus accelerometer noise
-        accel_variance = 6
-        new_accel_raw  = add_noise(State.acceleration_mps2,accel_variance)
+        accel_variance_mps2     = 0.01
+        new_accel_mps2          = add_noise(Inputs.forces_n/MassProperties.mass_kg,accel_variance_mps2)
 
         # Convert acceleration in m/s^2 to LSB (format the accelerometer actual outputs)    
-        accel2lsb      = 1046 
-        self.accel_raw = new_accel_raw * accel2lsb
-    
-    def get_gyro_raw(self,State):
+        
+        self.accel_lsb          = new_accel_mps2 * mps2_2_lsb
+        self.sensor_vector[1:3] = self.accel_lsb
+    def get_gyro_lsb(self,State,time):
         '''
         Returns:
-            new_gyro_raw   (np.array(3)) = New gyro measumrnets [theta,phi,psi]
+            new_gyro_lsb   (np.array(3)) = New gyro measumrnets [theta,phi,psi]
             sensor_vecotor (np.array(6)) = New udpdated sensor vector
         Inputs:
             State          (Class)       = Current absolute state (see Kinematics.py)
         '''
+        gyro_variance_rad = 0.1
+        gyro_bias_rad     = 2
+        gyro_drift_radps  = 0.01
+
+        # Calculate a new gyro measurment (+ bias + current_drift) and some noise
+        new_gyro_radps          = add_noise(State.w_radps + gyro_bias_rad + 
+                                            (gyro_drift_radps*time),gyro_variance_rad)
+        
+        
+        self.gyro_lsb           = new_gyro_radps * radps_2_lsb
+        self.sensor_vector[3:6] = self.get_gyro_lsb
