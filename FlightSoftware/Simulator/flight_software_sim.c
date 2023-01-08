@@ -13,25 +13,12 @@ File currently
 //generate a .so
 //gcc -fPIC -shared -o c_test.so c_test.c 
 
-double* PID(double target,double actual, double* pid_storage, double dt){
-    /*
-    Returns:
-        pid_output (double) = output of a pid controller
-    */
-     // Calculate error
-    double error      = target - actual;
+void control(double state_vector[6],double target_vector[6], double control_output[6]){
 
-    // Update I term
-    double I_term      = pid_storage[pid_I] + pid_storage[Ki] * error * dt;
+    int i;
 
-    // Calculate output
-    double pid_result = (pid_storage[Kp] * error) + 
-                        (pid_storage[pid_I]) +  
-                        ((pid_storage[last_error] - error) * pid_storage[Kd]) / dt;
+    for (i =0; i < 6; i++){
+        control_output[i] = state_vector[i] + target_vector[i];
+    }
 
-    double* pid_output;
-    pid_output[0] = pid_result;
-    pid_output[1] = I_term;
-    pid_output[2] = error;
-    return pid_output;
 }
