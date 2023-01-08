@@ -19,21 +19,25 @@ class State:
         Cb2i_dcm     (np.array(3)(3)) = Attitude Dcm from body to intertia 
         w_radps      (np.arrau(3))    = Attitude rate about cg of the rigid body (theta,phi,psi)
     '''
-    def __init__(self,position_m=np.zeros(3),velocity_mps=np.zeros(3),
-                 Cb2i_dcm=np.identity(3),w_radps=np.zeros(3)):
+    def __init__(self,
+                 position_m = np.zeros(3),
+                 velocity_mps = np.zeros(3),
+                 acceleration_mps2 = np.zeros(3),
+                 Cb2i_dcm = np.identity(3),
+                 w_radps = np.zeros(3)):
 
-        self.position_m   = np.array(position_m)
-        self.velocity_mps = np.array(velocity_mps)
-        self.Cb2i_dcm     = np.array(Cb2i_dcm)
-        self.w_radps      = np.array(w_radps)
-        self.state_vector = np.array([position_m,
-                                      velocity_mps,
-                                      Cb2i_dcm[0],
-                                      Cb2i_dcm[1],
-                                      Cb2i_dcm[2],
-                                      w_radps]).flatten()
-                    
-                
+        self.position_m        = np.array(position_m)
+        self.velocity_mps      = np.array(velocity_mps)
+        self.acceleration_mps2 = np.array(acceleration_mps2)
+        self.Cb2i_dcm          = np.array(Cb2i_dcm)
+        self.w_radps           = np.array(w_radps)
+        self.state_vector      = np.array([position_m,
+                                           velocity_mps,
+                                           acceleration_mps2,
+                                           Cb2i_dcm[0],
+                                           Cb2i_dcm[1],
+                                           Cb2i_dcm[2],
+                                           w_radps]).flatten()    
     def update_from_state_vector(self,state_vector):
         '''
         Overview:
@@ -41,27 +45,44 @@ class State:
         Inputs:
             state_vector (np.array[1x18]) = Current state in vector form
         '''
-        self.state_vector = np.array(state_vector)
-        self.position_m   = np.array(self.state_vector[0:3])
-        self.velocity_mps = np.array(self.state_vector[3:6])
-        self.Cb2i_dcm     = np.array([self.state_vector[6:9],
-                                      self.state_vector[9:12],
-                                      self.state_vector[12:15]])
-        self.w_radps      = np.array(self.state_vector[15:18])
+        
+        self.state_vector      = np.array(state_vector)
+        self.position_m        = np.array(self.state_vector[0:3])
+        self.velocity_mps      = np.array(self.state_vector[3:6])
+        self.acceleration_mps2 = np.array(self.state_vector[6:9])
+        self.Cb2i_dcm          = np.array([self.state_vector[9:12],
+                                           self.state_vector[12:15],
+                                           self.state_vector[15:18]])
+        self.w_radps           = np.array(self.state_vector[18:21])
 
-    def update_from_properties(self,position_m,velocity_mps,
-                 Cb2i_dcm,w_radps):
+    def update_from_properties(self,
+                               position_m,
+                               velocity_mps,
+                               acceleration_mps2,
+                               Cb2i_dcm,
+                               w_radps):
 
-        self.position_m   = np.array(position_m)
-        self.velocity_mps = np.array(velocity_mps)
-        self.Cb2i_dcm     = np.array(Cb2i_dcm)
-        self.w_radps      = np.array(w_radps)
-        self.state_vector = np.array([position_m,
-                                      velocity_mps,
-                                      Cb2i_dcm[0],
-                                      Cb2i_dcm[1],
-                                      Cb2i_dcm[2],
-                                      w_radps]).flatten()
+        self.position_m        = np.array(position_m)
+        self.velocity_mps      = np.array(velocity_mps)
+        self.acceleration_mps2 = np.array(acceleration_mps2)
+        self.Cb2i_dcm          = np.array(Cb2i_dcm)
+        self.w_radps           = np.array(w_radps)
+        self.state_vector      = np.array([position_m,
+                                           velocity_mps,
+                                           acceleration_mps2,
+                                           Cb2i_dcm[0],
+                                           Cb2i_dcm[1],
+                                           Cb2i_dcm[2],
+                                           w_radps]).flatten()
+    def orthonomormalize_Cb2i_dcm(self):
+        self.Cb2i_dcm     = strapdown.orthonormalize(self.Cb2i_dcm)
+        self.state_vector = np.array([self.position_m,
+                                      self.velocity_mps,
+                                      self.acceleration_mps2,
+                                      self.Cb2i_dcm[0],
+                                      self.Cb2i_dcm[1],
+                                      self.Cb2i_dcm[2],
+                                      self.w_radps]).flatten()
 
 class Inputs:
     '''
@@ -114,7 +135,7 @@ State Derivative
 ===========================
 """
 
-def get_state_derivative(state_vector,Inputs,MassProperties):
+def get_state_derivative(state_vector,Inputs,MassProperties,dt):
     """
     Returns:
         statedot_matrix (np.array(18)) = Current state derivative in vector form
@@ -140,6 +161,8 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     # Calculate velocity corrected in the body frame (eq 3.1-21 and 3.1-12 Strapdown Analytics)
     velocity_mps      = np.matmul(Cb2i_dcm,velocity_mps)
 
+    
+
     # Calculate forces corrected in the body frame 
     drag_coefficent   = 1
     forces_n          = np.matmul(Cb2i_dcm,forces_n) - (velocity_mps * drag_coefficent)
@@ -147,9 +170,15 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     # Calculate acceleration from the forces acting on the body
     # a = F/m
     acceleration_mps2 = forces_n / mass_kg
-
+    
     # Model gravity in inertial frame
     acceleration_mps2[2] -= 9.8055  # Standard gravity in m/s
+
+    # Calculate the jerk
+    jerk_mps3         = acceleration_mps2/dt
+
+    
+
     # Calculate angular acceleration due to the moments acting on the body
     # w = I^-1(M-(w ×(Iw))
     wdot_radps2           = np.matmul(np.linalg.inv(i_tensor_cg),
@@ -159,7 +188,8 @@ def get_state_derivative(state_vector,Inputs,MassProperties):
     Cb2idot_dcm           = strapdown.rates2dcm(Cb2i_dcm, w_radps)
     
     return np.array([velocity_mps, 
-                     acceleration_mps2, 
+                     acceleration_mps2,
+                     jerk_mps3, 
                      Cb2idot_dcm[0], 
                      Cb2idot_dcm[1],
                      Cb2idot_dcm[2],
@@ -184,10 +214,10 @@ def rk4(state_vector, Inputs, MassProperties, dt):
         Source : https://medium.com/geekculture/runge-kutta-numerical-integration-of-ordinary-differential-equations-in-python-9c8ab7fb279c
     """
     
-    k1 = get_state_derivative(state_vector, Inputs, MassProperties)
-    k2 = get_state_derivative(state_vector + (k1 * dt / 2), Inputs, MassProperties)
-    k3 = get_state_derivative(state_vector + (k2 * dt / 2), Inputs, MassProperties)
-    k4 = get_state_derivative(state_vector + (k3 * dt), Inputs, MassProperties)
+    k1 = get_state_derivative(state_vector, Inputs, MassProperties,dt)
+    k2 = get_state_derivative(state_vector + (k1 * dt / 2), Inputs, MassProperties,dt)
+    k3 = get_state_derivative(state_vector + (k2 * dt / 2), Inputs, MassProperties,dt)
+    k4 = get_state_derivative(state_vector + (k3 * dt), Inputs, MassProperties,dt)
 
     return state_vector + np.array((k1 + 2 * k2 + 2 * k3 + k4) * dt / 6)
 

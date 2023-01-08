@@ -14,24 +14,25 @@ Inputs
 ===========================
 """
 # Sim Options
-sim_frequency     = 250
-start_time        = 0.0
-end_time          = 10.0
+sim_frequency           = 250
+start_time              = 0.0
+end_time                = 10.0
 
 # State Variables 
-init_position_m   = np.array([0,0,0.])
-init_velocity_mps = np.array([0,0,0.])
-init_Cb2i_dcm     = np.array([[1,0,0],
+init_position_m        = np.array([0,0,0.])
+init_velocity_mps      = np.array([0,0,0.])
+init_acceleration_mps2 = np.array([0,0,0])
+init_Cb2i_dcm          = np.array([[1,0,0],
                               [0,1,0],
                               [0,0,1.]])
-init_w_radps      = np.array([0,0,0])
-
-# Inputs
-init_forces_n     = np.array([0,0,0])
-init_moments_nm   = np.array([0,0,0])
+init_w_radps           = np.array([0,0,0])
+     
+# Inputs     
+init_forces_n          = np.array([0,0,0])
+init_moments_nm        = np.array([0,0,0])
 
 # Controller Options
-control_frequency = 50.
+control_frequency      = 50.
 
 np.random.seed(400)
 
@@ -41,11 +42,11 @@ Initialization
 ===========================
 """ 
 
-
-CurrentAbsoluteState = kinematics.State(position_m = init_position_m, 
-                                        velocity_mps = init_velocity_mps,
-                                        Cb2i_dcm     = init_Cb2i_dcm,
-                                        w_radps      = init_w_radps)
+CurrentAbsoluteState = kinematics.State(position_m        = init_position_m, 
+                                        velocity_mps      = init_velocity_mps,
+                                        acceleration_mps2 = init_acceleration_mps2,
+                                        Cb2i_dcm          = init_Cb2i_dcm,
+                                        w_radps           = init_w_radps)
 
 CurrentInputs = kinematics.Inputs(forces_n = init_forces_n,
                                   moments_nm = init_moments_nm)
@@ -75,6 +76,7 @@ Data Collection
 stash_state_vector = np.zeros((len(itt_sim),len(CurrentAbsoluteState.state_vector)))
 stash_input_vector = np.zeros((len(itt_sim),len(CurrentInputs.input_vector)))
 stash_position_controller = np.zeros((len(itt_sim),3))
+
 """
 ===========================
 Sim Loop
@@ -83,28 +85,14 @@ Sim Loop
 
 for i in range(len(itt_sim)):
 
-    # Update State with rk4 integration, and orthonormalize the attidue
+    # Update State with rk4 integration, and orthonormalize the attitude
     CurrentAbsoluteState.update_from_state_vector(kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
-    CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm)
-
-    if (itt_sim[i] - last_control_update) >= control_dt:
-        last_control_update = itt_sim[i]
-        # Update Control Model
-        control_output = flightsoftware_model.control_model(CurrentAbsoluteState,
-                                                            flightsoftware_model.TargetState,
-                                                            flightsoftware_model.PositionController,
-                                                            dt)
-
-        CurrentInputs.update_from_input_vector(control_output)
+    CurrentAbsoluteState.orthonomormalize_Cb2i_dcm()
     
     # Store state as a state_vector for plotting
-    stash_state_vector[i] = CurrentAbsoluteState.state_vector
+    print(CurrentAbsoluteState.state_vector)
     stash_input_vector[i] = CurrentInputs.input_vector
     stash_position_controller[i] = np.array(flightsoftware_model.PositionController.pid_I)
-
-    if itt_sim[i] >5:
-        flightsoftware_model.TargetState.update_from_properties([5,-5,4.],[0,0,0.],[[1,0,0],[0,1,0],[0,0,1]],[0,0,0])
-
 # Useful stats
 max_position_m_vector = np.array([max(stash_state_vector[:,0]),max(stash_state_vector[:,1]),max(stash_state_vector[:,2])])
 min_position_m_vector = np.array([min(stash_state_vector[:,0]),min(stash_state_vector[:,1]),min(stash_state_vector[:,2])])
@@ -117,6 +105,8 @@ Data Presentation
 # Input plotting
 plot_inputs      = True
 plot_I           = True
+
+# Sensor plotting
 
 # State plotting
 print_final      = False
