@@ -60,16 +60,19 @@ SimMassProperties    = kinematics.MassProperties(mass_kg = 10.0,
                                                          [0, 1, 0], 
                                                          [0, 0, 1.]])
    
-CurrentSensors       = sensor_model.Sensors(accel_mps2 = init_forces_n/SimMassProperties.mass_kg,
-                                           gyro_radps = init_w_radps)
+CurrentSensors       = sensor_model.Sensors()
+
+# Set first sensor readings
+CurrentSensors.get_accel_lsb(CurrentInputs,SimMassProperties)
+CurrentSensors.get_gyro_lsb(CurrentAbsoluteState,0)
 
 last_control_update = 0
-control_dt          = 1/control_frequency
+control_dt          = 1 / control_frequency
 
 last_sensor_update  = 0
-sensor_dt           = 1/sensor_frequency
+sensor_dt           = 1 / sensor_frequency
 
-dt                  = 1/sim_frequency
+dt                  = 1 / sim_frequency
 itt_sim             = np.arange(start_time,end_time,dt)
 
 """
@@ -137,7 +140,7 @@ plot_inputs      = False
 plot_I           = False
 
 # Sensor plotting
-plot_accel_raw   = False
+plot_accel_raw   = True
 plot_accel_v_sim = True
 
 # State plotting
@@ -301,40 +304,45 @@ if plot_trajectory:
     # Plotting the Animation
     fig = plt.figure()
     ax = plt.axes(projection='3d')
-    line_ani = animation.FuncAnimation(fig, animate, interval=1,   
-                                    frames=len(itt_plot))
+    line_ani = animation.FuncAnimation(fig, animate, interval=1, frames=len(itt_plot))
     plt.show()
 
 if plot_accel_v_sim:
     fig, axs = plt.subplots(2)
     axs[0].plot(itt_sim, stash_input_vector[:,0]/SimMassProperties.mass_kg,label = "Actual X",c = "red")
-    axs[0].plot(itt_sim, stash_sensor_vector[:,0]/sensor_model.mps2_2_lsb,label = "Sensor X",c = "maroon")
     axs[0].plot(itt_sim, stash_input_vector[:,1]/SimMassProperties.mass_kg,label = "Actual Y",c = "green")
-    axs[0].plot(itt_sim, stash_sensor_vector[:,1]/sensor_model.mps2_2_lsb,label = "Sensor Y",c = "olive")
     axs[0].plot(itt_sim, stash_input_vector[:,2]/SimMassProperties.mass_kg,label = "Actual Z",c = "blue")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,0]/sensor_model.mps2_2_lsb,label = "Sensor X",c = "maroon")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,1]/sensor_model.mps2_2_lsb,label = "Sensor Y",c = "olive")
     axs[0].plot(itt_sim, stash_sensor_vector[:,2]/sensor_model.mps2_2_lsb,label = "Sensor Z",c = "navy")
     axs[0].set_title("Accel (mps2)")
     axs[0].legend()
-    axs[1].plot(itt_sim, stash_state_vector[:,3],label = "Actual Xdot",c = "red")
-    axs[1].plot(itt_sim, stash_state_vector[:,4],label = "Actual Ydot",c = "green")
-    axs[1].plot(itt_sim, stash_state_vector[:,5],label = "Actual Zdot",c = "blue")
-    axs[1].plot(itt_sim, stash_sensor_vector[:,3]/sensor_model.radps_2_lsb,label = "Sensor Theta",c = "red")
-    axs[1].plot(itt_sim, stash_sensor_vector[:,4]/sensor_model.radps_2_lsb,label = "Sensor Phi",c = "green")
-    axs[1].plot(itt_sim, stash_sensor_vector[:,5]/sensor_model.radps_2_lsb,label = "Sensor Psi",c = "blue")
+    axs[1].plot(itt_sim, stash_state_vector[:,15],label = "Actual Theta",c = "red")
+    axs[1].plot(itt_sim, stash_state_vector[:,16],label = "Actual Phi",c = "green")
+    axs[1].plot(itt_sim, stash_state_vector[:,17],label = "Actual Psi",c = "blue")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,3]/sensor_model.radps_2_lsb,label = "Sensor Theta",c = "maroon")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,4]/sensor_model.radps_2_lsb,label = "Sensor Phi",c = "olive")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,5]/sensor_model.radps_2_lsb,label = "Sensor Psi",c = "navy")
     axs[1].set_title("Velocity (m)")
     axs[1].legend()
     plt.show()
 
 if plot_accel_raw:
+    plot_data = stash_sensor_vector
+    itt_plot = itt_sim
+    if True:
+        plot_frequency = sensor_frequency
+        plot_data = stash_sensor_vector[0:len(stash_sensor_vector):int(sim_frequency/plot_frequency)]   
+        itt_plot = itt_sim[0:len(itt_sim):int(sim_frequency/sensor_frequency)]
     fig, axs = plt.subplots(2)
-    axs[0].plot(itt_sim, stash_sensor_vector[:,0]/sensor_model.mps2_2_lsb,label = "Sensor X",c = "maroon")
-    axs[0].plot(itt_sim, stash_sensor_vector[:,1]/sensor_model.mps2_2_lsb,label = "Sensor Y",c = "olive")
-    axs[0].plot(itt_sim, stash_sensor_vector[:,2]/sensor_model.mps2_2_lsb,label = "Sensor Z",c = "navy")
+    axs[0].plot(itt_plot, plot_data[:,0]/sensor_model.mps2_2_lsb,label = "Sensor X",c = "maroon")
+    axs[0].plot(itt_plot, plot_data[:,1]/sensor_model.mps2_2_lsb,label = "Sensor Y",c = "olive")
+    axs[0].plot(itt_plot, plot_data[:,2]/sensor_model.mps2_2_lsb,label = "Sensor Z",c = "navy")
     axs[0].set_title("Accel (mps2)")
     axs[0].legend()
-    axs[1].plot(itt_sim, stash_sensor_vector[:,3]/sensor_model.radps_2_lsb,label = "Sensor Theta",c = "maroon")
-    axs[1].plot(itt_sim, stash_sensor_vector[:,4]/sensor_model.radps_2_lsb,label = "Sensor Phi",c = "olive")
-    axs[1].plot(itt_sim, stash_sensor_vector[:,5]/sensor_model.radps_2_lsb,label = "Sensor Psi",c = "navy")
-    axs[1].set_title("Velocity (m)")
+    axs[1].plot(itt_plot, plot_data[:,3]/sensor_model.radps_2_lsb,label = "Sensor Theta",c = "maroon")
+    axs[1].plot(itt_plot, plot_data[:,4]/sensor_model.radps_2_lsb,label = "Sensor Phi",c = "olive")
+    axs[1].plot(itt_plot, plot_data[:,5]/sensor_model.radps_2_lsb,label = "Sensor Psi",c = "navy")
+    axs[1].set_title("Gyro (rad/s)")
     axs[1].legend()
     plt.show()
