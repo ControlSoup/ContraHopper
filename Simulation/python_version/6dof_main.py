@@ -1,6 +1,7 @@
 import numpy as np
 import kinematics
 import flightsoftware_model
+import sensor_model
 import strapdown
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -13,8 +14,9 @@ from unit_conversions import deg2rad,rad2deg
 Inputs
 ===========================
 """
+
 # Sim Options
-sim_frequency     = 250
+sim_frequency     = 800
 start_time        = 0.0
 end_time          = 10.0
 
@@ -33,6 +35,9 @@ init_moments_nm   = np.array([0,0,0])
 # Controller Options
 control_frequency = 50.
 
+# Sensor Options
+sensor_frequency = 100.
+
 np.random.seed(400)
 
 """
@@ -47,21 +52,23 @@ CurrentAbsoluteState = kinematics.State(position_m = init_position_m,
                                         Cb2i_dcm     = init_Cb2i_dcm,
                                         w_radps      = init_w_radps)
 
-CurrentInputs = kinematics.Inputs(forces_n = init_forces_n,
-                                  moments_nm = init_moments_nm)
-
-ContraHopper = kinematics.MassProperties(mass_kg = 10.0, 
-                                         i_tensor_cg=[[1, 0, 0], 
-                                                      [0, 1, 0], 
-                                                      [0, 0, 1.]])
-
-Gyroscope = kinematics.MassProperties(mass_kg = 0.26, 
-                                      i_tensor_cg=[[0.7,0,0.7], 
-                                                   [0.0,1,0.0], 
-                                                   [0.7,0,-0.7]])
+CurrentInputs        = kinematics.Inputs(forces_n = init_forces_n,
+                                         moments_nm = init_moments_nm)
+   
+SimMassProperties    = kinematics.MassProperties(mass_kg = 10.0, 
+                                            i_tensor_cg=[[1, 0, 0], 
+                                                         [0, 1, 0], 
+                                                         [0, 0, 1.]])
+   
+CurrentSensors       = sensor_model.Sensors(accel_mps2 = init_forces_n/SimMassProperties.mass_kg,
+                                           gyro_radps = init_w_radps)
 
 last_control_update = 0
 control_dt          = 1/control_frequency
+
+last_sensor_update  = 0
+sensor_dt           = 1/sensor_frequency
+
 dt                  = 1/sim_frequency
 itt_sim             = np.arange(start_time,end_time,dt)
 
@@ -74,6 +81,8 @@ Data Collection
 # Pre-allocation of state_vector (for plotting)
 stash_state_vector = np.zeros((len(itt_sim),len(CurrentAbsoluteState.state_vector)))
 stash_input_vector = np.zeros((len(itt_sim),len(CurrentInputs.input_vector)))
+stash_sensor_vector = np.zeros((len(itt_sim),len(CurrentSensors.sensor_vector)))
+
 stash_position_controller = np.zeros((len(itt_sim),3))
 """
 ===========================
@@ -84,22 +93,31 @@ Sim Loop
 for i in range(len(itt_sim)):
 
     # Update State with rk4 integration, and orthonormalize the attidue
-    CurrentAbsoluteState.update_from_state_vector(kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, ContraHopper, dt))
+    CurrentAbsoluteState.update_from_state_vector(kinematics.rk4(CurrentAbsoluteState.state_vector, CurrentInputs, SimMassProperties, dt))
     CurrentAbsoluteState.Cb2i_dcm = strapdown.orthonormalize(CurrentAbsoluteState.Cb2i_dcm)
+
+    if (itt_sim[i] - last_sensor_update) >= sensor_dt:
+        last_sensor_update = itt_sim[i]
+
+        # Update Sensors
+        CurrentSensors.get_accel_lsb(CurrentInputs,SimMassProperties)
+        CurrentSensors.get_gyro_lsb(CurrentAbsoluteState,itt_sim[i])
 
     if (itt_sim[i] - last_control_update) >= control_dt:
         last_control_update = itt_sim[i]
+
         # Update Control Model
-        control_output = flightsoftware_model.control_model(CurrentAbsoluteState,
+        control_vector = flightsoftware_model.control_model(CurrentAbsoluteState,
                                                             flightsoftware_model.TargetState,
                                                             flightsoftware_model.PositionController,
                                                             dt)
 
-        CurrentInputs.update_from_input_vector(control_output)
+        CurrentInputs.update_from_input_vector(control_vector)
     
     # Store state as a state_vector for plotting
-    stash_state_vector[i] = CurrentAbsoluteState.state_vector
-    stash_input_vector[i] = CurrentInputs.input_vector
+    stash_state_vector[i]        = CurrentAbsoluteState.state_vector
+    stash_input_vector[i]        = CurrentInputs.input_vector
+    stash_sensor_vector[i]       = CurrentSensors.sensor_vector
     stash_position_controller[i] = np.array(flightsoftware_model.PositionController.pid_I)
 
     if itt_sim[i] >5:
@@ -115,15 +133,19 @@ Data Presentation
 ===========================
 """
 # Input plotting
-plot_inputs      = True
-plot_I           = True
+plot_inputs      = False
+plot_I           = False
+
+# Sensor plotting
+plot_accel_raw   = False
+plot_accel_v_sim = True
 
 # State plotting
 print_final      = False
 plot_position_3d = False
 plot_raw_2d      = False
 plot_position_2d = False
-plot_trajectory  = True
+plot_trajectory  = False
 plot_raw_3d      = False
 
 if plot_inputs:
@@ -281,4 +303,38 @@ if plot_trajectory:
     ax = plt.axes(projection='3d')
     line_ani = animation.FuncAnimation(fig, animate, interval=1,   
                                     frames=len(itt_plot))
+    plt.show()
+
+if plot_accel_v_sim:
+    fig, axs = plt.subplots(2)
+    axs[0].plot(itt_sim, stash_input_vector[:,0]/SimMassProperties.mass_kg,label = "Actual X",c = "red")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,0]/sensor_model.mps2_2_lsb,label = "Sensor X",c = "maroon")
+    axs[0].plot(itt_sim, stash_input_vector[:,1]/SimMassProperties.mass_kg,label = "Actual Y",c = "green")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,1]/sensor_model.mps2_2_lsb,label = "Sensor Y",c = "olive")
+    axs[0].plot(itt_sim, stash_input_vector[:,2]/SimMassProperties.mass_kg,label = "Actual Z",c = "blue")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,2]/sensor_model.mps2_2_lsb,label = "Sensor Z",c = "navy")
+    axs[0].set_title("Accel (mps2)")
+    axs[0].legend()
+    axs[1].plot(itt_sim, stash_state_vector[:,3],label = "Actual Xdot",c = "red")
+    axs[1].plot(itt_sim, stash_state_vector[:,4],label = "Actual Ydot",c = "green")
+    axs[1].plot(itt_sim, stash_state_vector[:,5],label = "Actual Zdot",c = "blue")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,3]/sensor_model.radps_2_lsb,label = "Sensor Theta",c = "red")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,4]/sensor_model.radps_2_lsb,label = "Sensor Phi",c = "green")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,5]/sensor_model.radps_2_lsb,label = "Sensor Psi",c = "blue")
+    axs[1].set_title("Velocity (m)")
+    axs[1].legend()
+    plt.show()
+
+if plot_accel_raw:
+    fig, axs = plt.subplots(2)
+    axs[0].plot(itt_sim, stash_sensor_vector[:,0]/sensor_model.mps2_2_lsb,label = "Sensor X",c = "maroon")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,1]/sensor_model.mps2_2_lsb,label = "Sensor Y",c = "olive")
+    axs[0].plot(itt_sim, stash_sensor_vector[:,2]/sensor_model.mps2_2_lsb,label = "Sensor Z",c = "navy")
+    axs[0].set_title("Accel (mps2)")
+    axs[0].legend()
+    axs[1].plot(itt_sim, stash_sensor_vector[:,3]/sensor_model.radps_2_lsb,label = "Sensor Theta",c = "maroon")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,4]/sensor_model.radps_2_lsb,label = "Sensor Phi",c = "olive")
+    axs[1].plot(itt_sim, stash_sensor_vector[:,5]/sensor_model.radps_2_lsb,label = "Sensor Psi",c = "navy")
+    axs[1].set_title("Velocity (m)")
+    axs[1].legend()
     plt.show()
