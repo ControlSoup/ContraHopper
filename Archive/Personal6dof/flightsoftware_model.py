@@ -2,10 +2,6 @@ import numpy as np
 import pathlib
 import kinematics
 from ctypes import *
-# control function
-c_functions = CDLL(str(pathlib.Path(__file__).parent.resolve())+"..\..\..\FlightSoftware\Simulator\\flight_software_sim.so")
-c_functions.control.argtypes = [POINTER(c_double),POINTER(c_double)]
-
 
 def ctype_array2np_array(ctype_arr,length):
     new_np_array = np.zeros(length)
