@@ -10,7 +10,7 @@ bskPath = __path__[0]
 fileName = os.path.basename(os.path.splitext(__file__)[0])
 
 # import simulation related support
-from Basilisk.simulation import spacecraft
+from Basilisk.simulation import spacecraft,extForceTorque
 # general support file with common unit test functions
 # import general simulation support files
 from Basilisk.utilities import (SimulationBaseClass, macros, unitTestSupport, vizSupport)
@@ -45,6 +45,14 @@ def run(show_plots,sim_time,sim_frequency,log_frequency):
    scObject.hub.r_CN_NInit     = [[0.],[0.],[0.]]   # m   - r_BN_N
    scObject.hub.v_CN_NInit     = [[0.],[0.],[0.]]   # m/s - v_BN_N
 
+   # setup extForceTorque module
+   # the control torque is read in through the messaging system
+   extFTObject = extForceTorque.ExtForceTorque()
+   extFTObject.ModelTag = "externalDisturbance"
+   scObject.addDynamicEffector(extFTObject)
+   scSim.AddModelToTask(simTaskName, extFTObject)
+
+
    # specifiy simulation specifics
    simulationTime = macros.sec2nano(sim_time)
    numDataPoints = sim_time*log_frequency
@@ -68,12 +76,25 @@ def run(show_plots,sim_time,sim_frequency,log_frequency):
    #vVt = unitTestSupport.EigenVector3d2np(velRef.getState())
 
    # operation on State on state
-   new_vel = np.array([1,0,20.])
-   new_omega = np.array([1,0,0.])
+   new_vel = np.array([0,0,0.])
+   new_omega = np.array([0,0,0.])
 
    # set state
    velRef.setState(unitTestSupport.np2EigenVectorXd(new_vel))
    omegaRef.setState(unitTestSupport.np2EigenVectorXd(new_omega))
+
+   # extFT 
+   msgForce = messaging.CmdForceBodyMsgPayload()
+   msgForce.forceRequestBody = [10,0,0.]
+   cmdForceBodyMsg = messaging.CmdForceBodyMsg().write(msgForce)
+   extFTObject.cmdForceBodyInMsg.subscribeTo(cmdForceBodyMsg)
+
+   msgTorque = messaging.CmdTorqueBodyMsgPayload()
+   msgTorque.torqueRequestBody = [0,0.1,0.]
+   cmdTorqueBodyMsg = messaging.CmdTorqueBodyMsg().write(msgTorque)
+   extFTObject.cmdTorqueInMsg.subscribeTo(cmdTorqueBodyMsg)
+
+   # set Forces and Torques
 
    # configure a simulation stop time and execute the simulation run
    scSim.ConfigureStopTime(simulationTime)
@@ -101,6 +122,6 @@ def run(show_plots,sim_time,sim_frequency,log_frequency):
 # Run the file 
 if __name__ == "__main__":
     run(show_plots    = True, 
-        sim_time      = 120,
+        sim_time      = 40,
         sim_frequency = 100, 
-        log_frequency = 10)
+        log_frequency = 1)
