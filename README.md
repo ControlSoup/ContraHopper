@@ -4,8 +4,7 @@ The ContraHopper is a small rotor craft using two counter rotating propellers an
 This repository is not intended for collaborative use at this time.
 
 ## Formal Introduction
-ContraHopper is a project that stems from my personal interest in the design, control and operation of rocket powered landers. Landers operate under the final stage of a planetary mission and serve the purpose of transferring the payload to the surface of your target planetary body. Over the years there has been a considerable number of terrestrial landers that attempt to help test tech-
-nology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth and sometimes they even make it back to the ground.
+ContraHopper is a project that stems from my personal interest in the design, control and operation of rocket powered landers. Landers operate under the final stage of a planetary mission and serve the purpose of transferring the payload to the surface of your target planetary body. Over the years there has been a considerable number of terrestrial landers that attempt to help test technology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth and sometimes they even make it back to the ground.
 
 
 ![alt text](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/Terrestial_Landers.jpg)
