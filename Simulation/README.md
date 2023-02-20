@@ -5,6 +5,7 @@ Information about the Basalisk simulation frame work can be found at: http://han
 ## Current Sim
 - Intilizes basalisk frame work
 - Creates a spacecraft object
+- Uses modified spacecraft object to output DCM attitude instead of MRPs
 - Performs a constant velocity and constant angular velocity movement
 - Plots data and trajectory
 
