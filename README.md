@@ -8,7 +8,7 @@ ContraHopper is a project that stems from my personal interest in the design, co
 nology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth and sometimes they even make it back to the ground.
 
 
-![alt text](https://github.com/pistonsoup/ContraHopper/Documentation/Figures/Terrestial_Landers.jpg?raw=true)
+![alt text](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/Terrestial_Landers.jpg)
 Figure 1: Left to Right: Pixel (Armadillo), Xodiac (Masten), Delta Clipper (NASA), Mighty Eagle NASA)
 
 Vehicles like this give me incredible joy. My goal with the project is create a low budget version that is
