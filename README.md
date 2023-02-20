@@ -3,22 +3,20 @@ The ContraHopper is a small rotor craft using two counter rotating propellers an
 
 This repository is not intended for collaborative use at this time.
 
-# Formal Introduction
-ContraHopper is a project that stems from my personal interest in the design, control and operation of
-rocket powered landers. Landers operate under the final stage of a planetary mission and serve the purpose
-of transferring the payload to the surface of your target planetary body.
-Over the years there has been a considerable number of terrestrial landers that attempt to help test tech-
-nology associated with landing on other planets and in my opinion, these vehicles are the most interesting
-flying things to leave the surface of the earth and sometimes they even make it back to the ground.
+## Formal Introduction
+ContraHopper is a project that stems from my personal interest in the design, control and operation of rocket powered landers. Landers operate under the final stage of a planetary mission and serve the purpose of transferring the payload to the surface of your target planetary body. Over the years there has been a considerable number of terrestrial landers that attempt to help test tech-
+nology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth and sometimes they even make it back to the ground.
 
-Figure 1: Left to Right: Pixel (Armadillo), Xodiac (Masten), Delta Clipper (NASA), Mighty Eagle (NASA)
+
+![alt text](https://github.com/pistonsoup/ContraHopper/Documentation/Figures/Terrestial_Landers.jpg?raw=true)
+Figure 1: Left to Right: Pixel (Armadillo), Xodiac (Masten), Delta Clipper (NASA), Mighty Eagle NASA)
 
 Vehicles like this give me incredible joy. My goal with the project is create a low budget version that is
 capable of many of the same things that terrestrial landers do, all from scratch as much as I can help to do.
 
 ## Constraints and Milestones
 
-###The constraints are as follows:
+### The constraints are as follows:
   - Minimum 1.5 minutes of flight time
   - Affordable at the Hobby scale
   - Dynamics of the vehicle a close to a rocket as possible at this scale
@@ -28,7 +26,7 @@ capable of many of the same things that terrestrial landers do, all from scratch
   - Document initial expected vehicle capabilities based on design decisions
   - Full characterization of vehicle using simulation
   - Completion of a 10s hover and landing
-  - Completion of a 30s hover and landing with complete position control within a reasonable tolerance
+  - Completion of a 30s hover and landing with complete position control within a reasonable    tolerance
   - Completion of a 1min flight with a translation in both height and distance, demonstrating position,
     velocity, attitude and trajectory control within a reasonable tolerance
 
