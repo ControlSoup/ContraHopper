@@ -1991,7 +1991,7 @@
     (property "Reference" "R2" (id 0) (at 29.21 121.9199 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "2k" (id 1) (at 29.21 124.4599 0)
+    (property "Value" "R" (id 1) (at 29.21 124.4599 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "UserKiCadFootprints:pinhole_resistor" (id 2) (at 24.892 123.19 90)
@@ -2828,7 +2828,7 @@
   (symbol (lib_id "Device:LED") (at 209.55 50.8 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid ee74ff6d-b41f-4c74-a993-13dd5c25e99b)
-    (property "Reference" "BLUE1" (id 0) (at 208.28 57.15 0))
+    (property "Reference" "RED1" (id 0) (at 208.28 57.15 0))
     (property "Value" "LED" (id 1) (at 208.28 54.61 0))
     (property "Footprint" "UserKiCadFootprints:LED" (id 2) (at 209.55 50.8 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -2926,7 +2926,7 @@
     (property "Reference" "R1" (id 0) (at 29.21 114.2999 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "6k" (id 1) (at 29.21 116.8399 0)
+    (property "Value" "R" (id 1) (at 29.21 116.8399 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "UserKiCadFootprints:pinhole_resistor" (id 2) (at 24.892 115.57 90)
@@ -2942,7 +2942,7 @@
   (symbol (lib_id "Device:LED") (at 209.55 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid fe1c6224-af8a-4cd4-aba7-4fdcb9e56bf0)
-    (property "Reference" "RED1" (id 0) (at 207.9625 33.02 0))
+    (property "Reference" "BLUE1" (id 0) (at 207.9625 33.02 0))
     (property "Value" "LED" (id 1) (at 207.9625 35.56 0))
     (property "Footprint" "UserKiCadFootprints:LED" (id 2) (at 209.55 39.37 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -3082,7 +3082,7 @@
     (path "/4cb77684-2b7e-41d7-aeda-c4bbde966dde"
       (reference "BATT1") (unit 1) (value "LIPO") (footprint "UserKiCadFootprints:XT60_MOUNT")
     )
-    (path "/ee74ff6d-b41f-4c74-a993-13dd5c25e99b"
+    (path "/fe1c6224-af8a-4cd4-aba7-4fdcb9e56bf0"
       (reference "BLUE1") (unit 1) (value "LED") (footprint "UserKiCadFootprints:LED")
     )
     (path "/c2ef3bd7-4f00-4b9c-a4e4-3bf11f5e7475"
@@ -3110,10 +3110,10 @@
       (reference "M2_SIGNAL1") (unit 1) (value "XING2/BL_HELI35A_SIGNAL") (footprint "UserKiCadFootprints:JST_XH_2pin")
     )
     (path "/fcbbe054-232f-4e31-8d3b-fbffabeff3bc"
-      (reference "R1") (unit 1) (value "6k") (footprint "UserKiCadFootprints:pinhole_resistor")
+      (reference "R1") (unit 1) (value "R") (footprint "UserKiCadFootprints:pinhole_resistor")
     )
     (path "/1a4e8bc0-8d45-46fd-9ad4-5c97e9911464"
-      (reference "R2") (unit 1) (value "2k") (footprint "UserKiCadFootprints:pinhole_resistor")
+      (reference "R2") (unit 1) (value "R") (footprint "UserKiCadFootprints:pinhole_resistor")
     )
     (path "/bc316908-a33b-4bea-b56c-4d4678cbe951"
       (reference "R3") (unit 1) (value "R") (footprint "UserKiCadFootprints:pinhole_resistor")
@@ -3124,7 +3124,7 @@
     (path "/98f9ac71-ef5f-4a77-836f-938cad8850f6"
       (reference "RADIO1") (unit 1) (value "FS-IA6B") (footprint "UserKiCadFootprints:FS-IA6B")
     )
-    (path "/fe1c6224-af8a-4cd4-aba7-4fdcb9e56bf0"
+    (path "/ee74ff6d-b41f-4c74-a993-13dd5c25e99b"
       (reference "RED1") (unit 1) (value "LED") (footprint "UserKiCadFootprints:LED")
     )
     (path "/3dceb7d3-1287-4908-9c46-e2f634056986"
