@@ -7,7 +7,7 @@ This repository is not intended for collaborative use at this time.
 ContraHopper is a project that stems from my personal interest in the design, control and operation of rocket powered landers. Landers operate under the final stage of a planetary mission and serve the purpose of transferring the payload to the surface of your target planetary body. Over the years there has been a considerable number of terrestrial landers that attempt to help test technology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth. 
 
 
-![alt text](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/Terrestial_Landers.jpg)
+![](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/Terrestial_Landers.jpg)
 Figure 1: Left to Right: Pixel (Armadillo), Xodiac (Masten), Delta Clipper (NASA), Mighty Eagle NASA)
 
 Vehicles like this give me incredible joy. My goal with the project is create a low budget version that is
