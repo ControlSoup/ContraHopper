@@ -8,7 +8,7 @@ Refrence data sheets for integrated circuits and sensors that interface with the
 Contains the KiCad project, schematic and layout of the flight computer.
 
 FlightBread 0.1 is complete:
-[alt_text](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/FlightBreadv0.1.jpeg)
+![](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/FlightBreadv0.1.jpeg)
 
 # ToDo
 - Fix mounting holes on Flight Bread
