@@ -8,13 +8,12 @@ Refrence data sheets for integrated circuits and sensors that interface with the
 Contains the KiCad project, schematic and layout of the flight computer.
 
 FlightBread 0.1 is complete:
-![](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/FlightBreadv0.1.jpeg)
-
-# ToDo
-- Fix mounting holes on Flight Bread
+### ToDo
+- Fix mounting holes
 - FS-IA6 outline is backwards
 - LM358 opamp is the wrong scale
 
+<img src="https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/FlightBreadv0.1.jpeg"  width="600" height="900">
 
 ## FlightBread_Footprints
 Contains custom KiCad Footprint
