@@ -353,7 +353,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "ContraHopperFlightComputer.kicad_pro",
+    "filename": "FlightBread.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -387,7 +387,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "FlightBread.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
