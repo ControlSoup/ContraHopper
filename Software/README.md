@@ -1,5 +1,5 @@
 # Asoftware
-This folder contains all the files used to develop the flight software for ContraHopper
+Contains the Flightsoftware used on FlightBread
 
 # Simulation
 Basalisk framework simulation files
