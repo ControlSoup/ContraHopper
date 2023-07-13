@@ -1,11 +1,13 @@
-# Quick Overview
+# Quick Overview [No Longer Maintained as of 07-12-23]
 The ContraHopper is a small rotor craft using two counter rotating propellers and jet vanes to maintain attitude and altitude. This project is a personal project with unnecessary constraints to mimic the control of VTVL rockets. 
 
 This repository is not intended for collaborative use at this time.
 
-## Formal Introduction
-ContraHopper is a project that stems from my personal interest in the design, control and operation of rocket powered landers. Landers operate under the final stage of a planetary mission and serve the purpose of transferring the payload to the surface of your target planetary body. Over the years there has been a considerable number of terrestrial landers that attempt to help test technology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth. 
 
+## Formal Introduction
+ContraHopper is a project that stems from my personal interest in the design, control, and operation of rocket-powered landers. Landers operate under the final stage of a planetary mission and serve the purpose of transferring the payload to the surface of your target planetary body. Over the years there has been a considerable number of terrestrial landers that attempt to help test technology associated with landing on other planets and in my opinion, these vehicles are the most interesting flying things to leave the surface of the earth. 
+
+Ultimately I have had to scrap this project due to professional goals, I am keeping this up for reference on my future topics.
 
 ![](https://github.com/ControlSoup/ContraHopper/blob/main/Documentation/Figures/Terrestial%20Landers.jpg)
 Figure 1: Left to Right: Pixel (Armadillo), Xodiac (Masten), Delta Clipper (NASA), Mighty Eagle NASA)
