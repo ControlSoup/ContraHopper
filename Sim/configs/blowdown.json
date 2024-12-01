@@ -1,0 +1,40 @@
+{
+  "SimOptions": {
+    "dt": 0.001,
+    "max_dt": 1.0,
+    "min_dt": 0.001
+  },
+  "SimObjects": [
+    {
+      "object": "fluids.volumes.Static",
+      "name": "UpstreamTest",
+      "press": 200000,
+      "temp": 277,
+      "volume": 10,
+      "fluid": "Nitrogen",
+      "connections_out": [
+        "TestOrifice"
+      ]
+    },
+    {
+      "object": "fluids.restrictions.Orifice",
+      "name": "TestOrifice",
+      "cda": 0.01,
+      "mdot_method": "IdealCompressible"
+    },
+    {
+      "object": "fluids.volumes.Void",
+      "name": "DownstreamTest",
+      "press": 100000,
+      "temp": 277,
+      "fluid": "Nitrogen",
+      "connections_in": [
+        "TestOrifice"
+      ]
+    }
+  ],
+  "RecorderOptions": {
+    "path": "../data/blowdown-0001",
+    "min_dt": 0.01
+  }
+}
