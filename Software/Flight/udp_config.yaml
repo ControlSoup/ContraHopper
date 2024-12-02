@@ -1,0 +1,23 @@
+Network:
+  SSID: "MKULTRA II"
+  port: 4210
+
+Outputs:
+  - time [s]
+  - state [-]
+  - LOAD-1 [lbf]
+  - LOAD-2 [lbf]
+  - LOAD-3 [lbf]
+  - LOAD-4 [lbf]
+  - LOAD-5 [lbf]
+  - LOAD-6 [lbf]
+  - MOTOR-1 [-]
+  - MOTOR-2 [-]
+
+# Inputs are only 3 charachters
+Inputs:
+  - ERROR: "ERR" 
+  - START: "STR"
+  - STOP: "STP"
+  - ABORT: "ABT"
+  - TERMINATE: "!!!"

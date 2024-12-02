@@ -164,6 +164,7 @@ cython_debug/
 ### Personl
 network_outputs.ino
 .DS_Store
+log/
 *.log
 *.aux
 *.synctex.gz
